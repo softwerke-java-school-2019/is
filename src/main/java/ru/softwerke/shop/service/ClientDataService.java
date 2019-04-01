@@ -1,8 +1,10 @@
 package ru.softwerke.shop.service;
 
+import ru.softwerke.shop.model.BeanComparator;
 import ru.softwerke.shop.model.Client;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,5 +47,10 @@ public class ClientDataService {
         }
 
         return client.contains(filter);
+    }
+
+    public List<Client> sortBy(String parameter) {
+        Collections.sort(clients, new BeanComparator("parameter"));
+        return clients;
     }
 }

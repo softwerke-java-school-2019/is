@@ -1,5 +1,6 @@
 package ru.softwerke.shop.controller;
 
+import ru.softwerke.shop.model.BeanComparator;
 import ru.softwerke.shop.model.Client;
 import ru.softwerke.shop.model.DateDeserializer;
 import ru.softwerke.shop.service.ClientDataService;
@@ -8,6 +9,7 @@ import ru.softwerke.shop.service.ClientFilter;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 @Path("/client")
@@ -41,18 +43,27 @@ public class ClientController {
                                 @QueryParam("name") String name,
                                 @QueryParam("patronymic") String patronymic,
                                 @QueryParam("birthday from") String dateFromStr,
-                                @QueryParam("birthday to") String dateToStr) {
+                                @QueryParam("birthday to") String dateToStr,
+                                @QueryParam("order by") String parameter,
+                                @QueryParam("reverse") boolean reverse) {
         LocalDate dateFrom = null;
         LocalDate dateTo = null;
 
         if (dateFromStr != null) {
-            dateFrom = LocalDate.parse(dateFromStr, DateDeserializer.formetter);
+            dateFrom = LocalDate.parse(dateFromStr, DateDeserializer.formatter);
         }
 
-        if (dateFromStr != null) {
-            dateTo = LocalDate.parse(dateToStr, DateDeserializer.formetter);
+        if (dateToStr != null) {
+            dateTo = LocalDate.parse(dateToStr, DateDeserializer.formatter);
         }
 
-        return data.filter(new ClientFilter(name, secondName, patronymic, dateFrom, dateTo));
+        List<Client> ans = data.filter(new ClientFilter(name, secondName, patronymic, dateFrom, dateTo));
+        if (reverse) {
+            Collections.sort(ans, new BeanComparator(parameter).reversed());
+        }
+        else {
+            Collections.sort(ans, new BeanComparator(parameter));
+        }
+        return ans;
     }
 }

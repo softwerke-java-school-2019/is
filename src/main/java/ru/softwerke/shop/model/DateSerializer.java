@@ -10,6 +10,6 @@ import java.time.LocalDate;
 public class DateSerializer extends JsonSerializer<LocalDate> {
     @Override
     public void serialize(LocalDate localDate, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-        jsonGenerator.writeString(localDate.format(DateDeserializer.formetter));
+        jsonGenerator.writeString(localDate.format(DateDeserializer.formatter));
     }
 }
