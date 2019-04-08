@@ -45,13 +45,9 @@ public class Application {
 
         ServletHolder dynamicServletHolder = ctx.addServlet(ServletContainer.class, "/*");
         dynamicServletHolder.setInitOrder(0);
-        dynamicServletHolder.setInitParameter(
-                "jersey.config.server.provider.classnames",
-                ClientController.class.getCanonicalName() + ", " +
-                com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider.class.getCanonicalName());
+        dynamicServletHolder.setInitParameter("javax.ws.rs.Application", ShopApplication.class.getCanonicalName());
 
 
-        dynamicServletHolder.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
 
         server.setHandler(ctx);
 

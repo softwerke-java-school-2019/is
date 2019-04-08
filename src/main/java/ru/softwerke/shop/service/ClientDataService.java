@@ -6,10 +6,15 @@ import ru.softwerke.shop.model.Client;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class ClientDataService {
-    static List<Client> clients = new ArrayList<>();
+    private CopyOnWriteArrayList<Client> clients;
+
+    public ClientDataService(){
+        clients = new CopyOnWriteArrayList<>();
+    }
 
     public Client addClient(Client client) {
         clients.add(client);
@@ -17,12 +22,7 @@ public class ClientDataService {
     }
 
     public Client getClientByID(long id) {
-        for (Client client : clients) {
-            if (client.getID() == id) {
-                return client;
-            }
-        }
-        return null;
+        return clients.stream().filter(client -> client.getId() == id).findFirst().orElse(null);
     }
 
     public List<Client> getClientsList() {

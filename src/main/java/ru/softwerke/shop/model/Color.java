@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Color {
-    static byte colorID = 0;
+    private static byte colorID = 0;
 
-    byte id;
-    String name;
-    Color rgb;
+    private byte id;
+    private String name;
+    private Color rgb;
 
     public Color(String name, Color rgb) {
         this.id = colorID++;

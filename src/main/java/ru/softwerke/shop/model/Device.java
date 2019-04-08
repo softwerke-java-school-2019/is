@@ -1,23 +1,48 @@
 package ru.softwerke.shop.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 
-public class Device {
-    static long currentID = 0;
+public class Device extends Item {
 
-    long ID;
-    String company, name;
-    Date released;
-    byte color, type;
-    BigDecimal price;
+    public static final String COMPANY_FIELD = "company";
+    public static final String NAME_FIELD = "name";
+    public static final String RELEASED_FIELD = "released";
+    public static final String COLOR_FIELD = "color";
+    public static final String TYPE_FIELD = "type";
+    public static final String PRICE_FIELD = "price";
 
-    DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+    @JsonProperty(COMPANY_FIELD)
+    private String company;
 
-    public Device(String company, String name, byte color, byte type, Date released, BigDecimal price) {
-        ID = ++currentID;
+    @JsonProperty(NAME_FIELD)
+    private String name;
+
+    @JsonProperty(RELEASED_FIELD)
+    @JsonSerialize(using = DateSerializer.class)
+    @JsonDeserialize(using = DateDeserializer.class)
+    private LocalDate released;
+
+    @JsonProperty(COLOR_FIELD)
+    private byte color;
+
+    @JsonProperty(TYPE_FIELD)
+    private byte type;
+
+    @JsonProperty(PRICE_FIELD)
+    private BigDecimal price;
+
+    public Device(@JsonProperty(COMPANY_FIELD) String company,
+                  @JsonProperty(NAME_FIELD) String name,
+                  @JsonProperty(COLOR_FIELD) byte color,
+                  @JsonProperty(TYPE_FIELD) byte type,
+                  @JsonProperty(RELEASED_FIELD) LocalDate released,
+                  @JsonProperty(PRICE_FIELD) BigDecimal price) {
+        super();
         this.company = company;
         this.name = name;
         this.released = released;
@@ -26,8 +51,8 @@ public class Device {
         this.price = price;
     }
 
-    public long getID() {
-        return ID;
+    public long getId() {
+        return id;
     }
 
     public String getCompany() {
@@ -38,7 +63,7 @@ public class Device {
         return name;
     }
 
-    public Date getReleased() {
+    public LocalDate getReleased() {
         return released;
     }
 
@@ -69,10 +94,10 @@ public class Device {
     @Override
     public String toString() {
         return "Device{" +
-                "id=" + ID +
+                "id=" + id +
                 ", company='" + company + '\'' +
                 ", name='" + name + '\'' +
-                ", released=" + df.format(released) +
+                ", released=" + released +
                 ", color=" + color +
                 ", type=" + type +
                 ", price=" + price +

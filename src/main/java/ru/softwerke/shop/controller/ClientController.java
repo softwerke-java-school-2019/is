@@ -6,15 +6,22 @@ import ru.softwerke.shop.model.DateDeserializer;
 import ru.softwerke.shop.service.ClientDataService;
 import ru.softwerke.shop.service.ClientFilter;
 
+import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
 @Path("/client")
 public class ClientController {
-    private ClientDataService data = new ClientDataService();
+    private ClientDataService data;
+
+    @Inject
+    public ClientController(ClientDataService data){
+        this.data = data;
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -32,8 +39,11 @@ public class ClientController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Client createClient(Client client) {
-        return data.addClient(client);
+    public Response createClient(Client client) {
+        if (client == null) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+        return Response.status(Response.Status.OK).entity(data.addClient(client)).build();
     }
 
     @GET
@@ -58,11 +68,12 @@ public class ClientController {
         }
 
         List<Client> ans = data.filter(new ClientFilter(name, secondName, patronymic, dateFrom, dateTo));
+
         if (reverse) {
-            Collections.sort(ans, new BeanComparator(parameter).reversed());
+            ans.sort(new BeanComparator(parameter).reversed());
         }
         else {
-            Collections.sort(ans, new BeanComparator(parameter));
+            ans.sort(new BeanComparator(parameter));
         }
         return ans;
     }
