@@ -4,21 +4,15 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Color {
-    private static byte colorID = 0;
+public class Color extends Item {
 
-    private byte id;
     private String name;
     private Color rgb;
 
     public Color(String name, Color rgb) {
-        this.id = colorID++;
+        super();
         this.name = name;
         this.rgb = rgb;
-    }
-
-    public byte getId() {
-        return id;
     }
 
     public String getName() {

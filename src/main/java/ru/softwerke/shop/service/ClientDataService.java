@@ -1,56 +1,44 @@
 package ru.softwerke.shop.service;
 
-import ru.softwerke.shop.model.BeanComparator;
 import ru.softwerke.shop.model.Client;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.stream.Collectors;
 
-public class ClientDataService {
-    private CopyOnWriteArrayList<Client> clients;
+public class ClientDataService extends DataService<Client> {
 
-    public ClientDataService(){
-        clients = new CopyOnWriteArrayList<>();
+    private static final String BY_NAME = "name";
+    private static final String BY_SECOND_NAME = "secondName";
+    private static final String BY_PATRONYMIC = "patronymic";
+    private static final String BY_BIRTHDATE_FROM = "birthdayFrom";
+    private static final String BY_BIRTHDATE_TO = "birthdayTo";
+    private static final String BY_BIRTHDATE = "birthday";
+
+    public ClientDataService() {
+        predicates = new HashMap<>();
+        comparators = new HashMap<>();
+        items = new CopyOnWriteArrayList<>();
+
+        predicates.put(BY_NAME, term -> client -> client.getName().startsWith(term));
+        predicates.put(BY_SECOND_NAME, term -> client -> client.getSecondName().startsWith(term));
+        predicates.put(BY_PATRONYMIC, term -> client -> client.getPatronymic().startsWith(term));
+        predicates.put(BY_BIRTHDATE_FROM, term -> client -> {
+            LocalDate date = LocalDate.parse(term, ServiceUtils.formatter);
+
+            return client.getBirthday().compareTo(date) >= 0;
+        });
+        predicates.put(BY_BIRTHDATE_TO, term -> client -> {
+            LocalDate date = LocalDate.parse(term, ServiceUtils.formatter);
+
+            return client.getBirthday().compareTo(date) <= 0;
+        });
+
+        comparators.put(BY_ID, Comparator.comparing(Client::getId));
+        comparators.put(BY_NAME, Comparator.comparing(Client::getName));
+        comparators.put(BY_SECOND_NAME, Comparator.comparing(Client::getSecondName));
+        comparators.put(BY_PATRONYMIC, Comparator.comparing(Client::getPatronymic));
+        comparators.put(BY_BIRTHDATE, Comparator.comparing(Client::getBirthday));
     }
 
-    public Client addClient(Client client) {
-        clients.add(client);
-        return client;
-    }
-
-    public Client getClientByID(long id) {
-        return clients.stream().filter(client -> client.getId() == id).findFirst().orElse(null);
-    }
-
-    public List<Client> getClientsList() {
-        return clients;
-    }
-
-    public List<Client> filter(ClientFilter filter) {
-        return clients.stream().filter(client -> filterClient(filter, client)).collect(Collectors.toList());
-    }
-
-    private boolean filterClient(ClientFilter filter, Client client) {
-        return (filterParameter(filter.getName(), client.getName())
-        && filterParameter(filter.getSecondName(), client.getSecondName())
-        && filterParameter(filter.getPatronymic(), client.getPatronymic())
-        && (filter.getDateFrom() == null || client.getBirthday().compareTo(filter.getDateFrom()) >= 0)
-        && (filter.getDateTo() == null || client.getBirthday().compareTo(filter.getDateTo()) <= 0));
-    }
-
-    private boolean filterParameter(String filter, String client) {
-        if (filter == null) {
-            return true;
-        }
-
-        return client.contains(filter);
-    }
-
-    public List<Client> sortBy(String parameter) {
-        Collections.sort(clients, new BeanComparator("parameter"));
-        return clients;
-    }
 }

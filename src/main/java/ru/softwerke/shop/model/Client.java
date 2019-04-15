@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -16,10 +17,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Client extends Item {
 
-    public static final String SECONDNAME_FIELD = "second name";
-    public static final String NAME_FIELD = "name";
-    public static final String PATRONYMIC_FIELD = "patronymic";
-    public static final String BIRTHDAY_FIELD = "birthday";
+    private static final String SECONDNAME_FIELD = "secondName";
+    private static final String NAME_FIELD = "name";
+    private static final String PATRONYMIC_FIELD = "patronymic";
+    private static final String BIRTHDAY_FIELD = "birthday";
 
     @JsonProperty(NAME_FIELD)
     private String name;
@@ -64,6 +65,25 @@ public class Client extends Item {
 
     public LocalDate getBirthday() {
         return birthday;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Client other = (Client) o;
+        return id == other.id &&
+                name.equals(other.name) &&
+                secondName.equals(other.secondName) &&
+                patronymic.equals(other.patronymic) &&
+                birthday.equals(other.birthday);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, secondName, patronymic, birthday);
     }
 
     @Override
