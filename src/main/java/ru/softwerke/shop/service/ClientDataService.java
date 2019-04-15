@@ -4,6 +4,7 @@ import ru.softwerke.shop.model.Client;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ClientDataService extends DataService<Client> {
@@ -16,8 +17,8 @@ public class ClientDataService extends DataService<Client> {
     private static final String BY_BIRTHDATE = "birthday";
 
     public ClientDataService() {
-        predicates = new HashMap<>();
-        comparators = new HashMap<>();
+        predicates = new ConcurrentHashMap<>();
+        comparators = new ConcurrentHashMap<>();
         items = new CopyOnWriteArrayList<>();
 
         predicates.put(BY_NAME, term -> client -> client.getName().startsWith(term));

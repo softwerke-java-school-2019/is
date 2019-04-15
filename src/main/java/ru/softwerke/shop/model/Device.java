@@ -6,15 +6,16 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 public class Device extends Item {
 
-    public static final String COMPANY_FIELD = "company";
-    public static final String NAME_FIELD = "name";
-    public static final String RELEASED_FIELD = "released";
-    public static final String COLOR_FIELD = "color";
-    public static final String TYPE_FIELD = "type";
-    public static final String PRICE_FIELD = "price";
+    private static final String COMPANY_FIELD = "company";
+    private static final String NAME_FIELD = "name";
+    private static final String RELEASED_FIELD = "released";
+    private static final String COLOR_FIELD = "color";
+    private static final String TYPE_FIELD = "type";
+    private static final String PRICE_FIELD = "price";
 
     @JsonProperty(COMPANY_FIELD)
     private String company;
@@ -28,18 +29,18 @@ public class Device extends Item {
     private LocalDate released;
 
     @JsonProperty(COLOR_FIELD)
-    private byte color;
+    private String color;
 
     @JsonProperty(TYPE_FIELD)
-    private byte type;
+    private String type;
 
     @JsonProperty(PRICE_FIELD)
     private BigDecimal price;
 
     public Device(@JsonProperty(COMPANY_FIELD) String company,
                   @JsonProperty(NAME_FIELD) String name,
-                  @JsonProperty(COLOR_FIELD) byte color,
-                  @JsonProperty(TYPE_FIELD) byte type,
+                  @JsonProperty(COLOR_FIELD) String color,
+                  @JsonProperty(TYPE_FIELD) String type,
                   @JsonProperty(RELEASED_FIELD) LocalDate released,
                   @JsonProperty(PRICE_FIELD) BigDecimal price) {
         super();
@@ -67,11 +68,11 @@ public class Device extends Item {
         return released;
     }
 
-    public byte getColor() {
+    public String getColor() {
         return color;
     }
 
-    public byte getType() {
+    public String getType() {
         return type;
     }
 
@@ -79,16 +80,25 @@ public class Device extends Item {
         return price;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Device other = (Device) o;
+        return id == other.id &&
+                name.equals(other.name) &&
+                company.equals(other.company) &&
+                color.equals(other.color) &&
+                type.equals(other.type) &&
+                price.equals(other.price) &&
+                released.equals(other.released);
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, company, released, color, type, price);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package ru.softwerke.shop.service;
 
 import org.eclipse.jetty.util.StringUtil;
-import ru.softwerke.shop.model.Client;
+import ru.softwerke.shop.controller.RequestException;
 import ru.softwerke.shop.model.Item;
 
 import javax.ws.rs.core.MultivaluedMap;
@@ -9,7 +9,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,7 +26,7 @@ public abstract class DataService<T extends Item> {
     private long page = 0;
     private long count = DEFAULT_COUNT;
 
-    Map<String, Function<String, Predicate<T>>> predicates;
+    Map<String, CheckedFunction<String, Predicate<T>>> predicates;
     Map<String, Comparator<T>> comparators;
 
     public T addItem(T item) {
@@ -43,7 +42,7 @@ public abstract class DataService<T extends Item> {
         return items;
     }
 
-    public  List<T> getList(MultivaluedMap<String, String> queryParams) throws QueryParamsException {
+    public  List<T> getList(MultivaluedMap<String, String> queryParams) throws RequestException {
         count = parseCount(queryParams);
         page = parsePage(queryParams);
 
@@ -54,17 +53,23 @@ public abstract class DataService<T extends Item> {
         for (Map.Entry<String, List<String>> entry : queryParams.entrySet()) {
             String param = entry.getKey();
 
-            Function<String, Predicate<T>> predicate = predicates.get(param);
+            CheckedFunction<String, Predicate<T>> predicate = predicates.get(param);
 
-            if (predicate != null) {
-                stream = stream.filter(predicate.apply(entry.getValue().get(0)));
+            if (param.equals(PAGE) || param.equals(COUNT) || param.equals(ORDER_BY)) {
+                continue;
+            } else {
+                if (predicate == null) {
+                    throw new RequestException("Illegal parameter name: " + param);
+                }
             }
+
+            stream = stream.filter(predicate.apply(entry.getValue().get(0)));
         }
 
         return stream.sorted(comparator).skip(page * count).limit(count).collect(Collectors.toList());
     }
 
-    private Comparator<T> getComparator(MultivaluedMap<String, String> queryParams) throws QueryParamsException {
+    private Comparator<T> getComparator(MultivaluedMap<String, String> queryParams) throws RequestException {
         String orderBy = queryParams.getFirst(ORDER_BY);
 
         if (StringUtil.isNotBlank(orderBy)) {
@@ -76,7 +81,7 @@ public abstract class DataService<T extends Item> {
 
             Comparator<T> comparator = comparators.get(orderBy);
             if (comparator == null){
-                throw new QueryParamsException("Illegal parameter value.\norderBy: " + orderBy);
+                throw new RequestException("Illegal parameter value.\norderBy: " + orderBy);
             }
 
             return (reversed ? comparator.reversed() : comparator);
@@ -84,13 +89,13 @@ public abstract class DataService<T extends Item> {
         return comparators.get(BY_ID);
     }
 
-    private long parseCount(MultivaluedMap<String, String> queryParams) throws QueryParamsException {
+    private long parseCount(MultivaluedMap<String, String> queryParams) throws RequestException {
         String countStr = queryParams.getFirst(COUNT);
 
         if (StringUtil.isNotBlank(countStr)) {
             long count = ServiceUtils.parseNumber(countStr, Long::parseLong);
             if (count < 0) {
-                throw new QueryParamsException("Positive number expected, instead: " + countStr);
+                throw new RequestException("Positive number expected, instead: " + countStr);
             }
 
             return count;
@@ -98,17 +103,21 @@ public abstract class DataService<T extends Item> {
         return this.count;
     }
 
-    private long parsePage(MultivaluedMap<String, String> queryParams) throws QueryParamsException {
+    private long parsePage(MultivaluedMap<String, String> queryParams) throws RequestException {
         String pageStr = queryParams.getFirst(PAGE);
 
         if (StringUtil.isNotBlank(pageStr)) {
             long page = ServiceUtils.parseNumber(pageStr, Long::parseLong);
             if (page < 0) {
-                throw new QueryParamsException("Non negative number expected, instead: " + pageStr);
+                throw new RequestException("Non negative number expected, instead: " + pageStr);
             }
             return page;
         }
         return this.page;
+    }
+
+    interface CheckedFunction<T, R> {
+        R apply(T t) throws RequestException;
     }
 
 }

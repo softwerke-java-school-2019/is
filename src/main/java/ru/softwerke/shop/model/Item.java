@@ -5,14 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class Item {
-    protected static AtomicLong currentID = new AtomicLong(0);
+    private static AtomicLong currentID = new AtomicLong(0);
 
-    public static final String ID_FILED = "id";
+    private static final String ID_FILED = "id";
 
     @JsonProperty(ID_FILED)
-    protected long id;
+    long id;
 
-    public Item() {
+    Item() {
         this.id = currentID.getAndIncrement();
     }
 

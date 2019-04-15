@@ -5,6 +5,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import ru.softwerke.shop.model.Client;
 import ru.softwerke.shop.service.ClientDataService;
 import ru.softwerke.shop.service.DataService;
+import ru.softwerke.shop.service.DeviceDataService;
 
 import javax.ws.rs.ApplicationPath;
 
@@ -19,10 +20,21 @@ public class ShopApplication extends ResourceConfig {
                 bind(clientService()).to(ClientDataService.class);
             }
         });
+
+        register(new AbstractBinder() {
+            @Override
+            protected void configure() {
+                bind(deviceService()).to(DeviceDataService.class);
+            }
+        });
     }
 
     private ClientDataService clientService(){
         return new ClientDataService();
+    }
+
+    private DeviceDataService deviceService(){
+        return new DeviceDataService();
     }
 
 }
