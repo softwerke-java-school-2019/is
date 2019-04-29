@@ -43,7 +43,7 @@ public class Application {
         ServletContextHandler ctx = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
         ctx.setContextPath("/");
 
-        ServletHolder dynamicServletHolder = ctx.addServlet(ServletContainer.class, "/*");
+        ServletHolder dynamicServletHolder = ctx.addServlet(ServletContainer.class, "/api/*");
         dynamicServletHolder.setInitOrder(0);
         dynamicServletHolder.setInitParameter("javax.ws.rs.Application", ShopApplication.class.getCanonicalName());
 

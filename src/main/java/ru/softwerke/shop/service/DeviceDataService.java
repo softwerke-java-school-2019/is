@@ -29,23 +29,25 @@ public class DeviceDataService extends DataService<Device> {
     public static CopyOnWriteArrayList<String> types = new CopyOnWriteArrayList<>();
 
     static {
-        colors.put("red", Color.RED);
-        colors.put("green", Color.GREEN);
-        colors.put("blue", Color.BLUE);
-        colors.put("yellow", Color.YELLOW);
-        colors.put("black", Color.BLACK);
-        colors.put("white", Color.WHITE);
+        colors.put("Red", Color.RED);
+        colors.put("Green", Color.GREEN);
+        colors.put("Blue", Color.BLUE);
+        colors.put("Yellow", Color.YELLOW);
+        colors.put("Black", Color.BLACK);
+        colors.put("White", Color.WHITE);
+        colors.put("Gray", Color.GRAY);
 
-        types.addAll(Arrays.asList("smartphone", "laptop", "mouse"));
+        types.addAll(Arrays.asList("Smartphone", "Laptop", "Smart Watches", "Tablet"));
     }
 
     public DeviceDataService(){
+
         predicates = new ConcurrentHashMap<>();
         comparators = new ConcurrentHashMap<>();
         items = new CopyOnWriteArrayList<>();
 
-        predicates.put(BY_NAME, term -> device -> device.getName().startsWith(term));
-        predicates.put(BY_COMPANY, term -> device -> device.getCompany().startsWith(term));
+        predicates.put(BY_NAME, term -> device -> device.getName().equals(term));
+        predicates.put(BY_COMPANY, term -> device -> device.getCompany().equals(term));
         predicates.put(BY_COLOR, term -> device -> device.getColor().equals(term));
         predicates.put(BY_TYPE, term -> device -> device.getType().equals(term));
         predicates.put(BY_RELEASED_FROM, term ->  {

@@ -30,7 +30,9 @@ public class Bill extends Item {
         this.clientId = clientId;
         this.purchaseDateTime = purchaseDateTime;
         this.items = items;
+    }
 
+    public void setTotalPrice() {
         for (BillItem item : items) {
             totalPrice = totalPrice.add(item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity())));
         }
@@ -51,5 +53,4 @@ public class Bill extends Item {
     public List<BillItem> getItems() {
         return items;
     }
-
 }

@@ -3,8 +3,10 @@ package ru.softwerke.shop.Utils;
 import org.eclipse.jetty.util.StringUtil;
 import ru.softwerke.shop.controller.RequestException;
 import ru.softwerke.shop.model.Bill;
+import ru.softwerke.shop.model.BillItem;
 import ru.softwerke.shop.model.Client;
 import ru.softwerke.shop.model.Device;
+import ru.softwerke.shop.service.ClientDataService;
 import ru.softwerke.shop.service.DeviceDataService;
 
 import java.math.BigDecimal;
@@ -55,7 +57,24 @@ public class ModelUtils {
         }
     }
 
-    public static void checkBill(Bill bill) throws RequestException {
+    public static void checkBill(Bill bill, ClientDataService clientData, DeviceDataService deviceData) throws RequestException {
+        if (clientData.getItemById(bill.getClientId()) == null) {
+            throw new RequestException("No client with " + bill.getClientId() + " id");
+        }
 
+        for (BillItem item : bill.getItems()) {
+            Device device = deviceData.getItemById(item.getDeviceId());
+            if (device == null) {
+                throw new RequestException("No device with " + item.getDeviceId() + " id");
+            }
+
+            if (item.getQuantity() < 1) {
+                throw new RequestException("Wrong quantity: " + item.getQuantity());
+            }
+
+            item.setPrice(device.getPrice());
+        }
+
+        bill.setTotalPrice();
     }
 }

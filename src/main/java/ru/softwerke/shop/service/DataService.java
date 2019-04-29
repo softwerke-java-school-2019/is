@@ -70,9 +70,9 @@ public class DataService<T extends Item> {
         }
 
         for (Comparator<T> comparator : sorts) {
-            stream = stream.sorted(comparator).skip(page * count).limit(count);
+            stream = stream.sorted(comparator);
         }
-        return stream.collect(Collectors.toList());
+        return stream.skip(page * count).limit(count).collect(Collectors.toList());
     }
 
     private List<Comparator<T>> getComparators(MultivaluedMap<String, String> queryParams) throws RequestException {
@@ -127,11 +127,15 @@ public class DataService<T extends Item> {
         if (StringUtil.isNotBlank(pageStr)) {
             long page = ServiceUtils.parseNumber(pageStr, Long::parseLong) - 1;
             if (page < 0) {
-                throw new RequestException("Non negative number expected, instead: " + pageStr);
+                throw new RequestException("Positive number expected, instead: " + pageStr);
             }
             return page;
         }
         return this.page;
+    }
+
+    public CopyOnWriteArrayList<T> getItems() {
+        return items;
     }
 
     interface CheckedFunction<T, R> {

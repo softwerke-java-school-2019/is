@@ -2,10 +2,8 @@ package ru.softwerke.shop.service;
 
 import ru.softwerke.shop.Utils.ServiceUtils;
 import ru.softwerke.shop.model.Bill;
-import ru.softwerke.shop.model.Client;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,8 +19,14 @@ public class BillDataService extends DataService<Bill> {
     private static final String BY_PURCHASE_DATE_TIME_TO = "dateTo";
     private static final String BY_PURCHASE_DATE_TIME = "date";
 
+    private final ClientDataService clientData;
+    private final DeviceDataService deviceData;
 
-    public BillDataService () {
+
+    public BillDataService (DeviceDataService deviceData, ClientDataService clientData) {
+        this.deviceData = deviceData;
+        this.clientData = clientData;
+
         predicates = new ConcurrentHashMap<>();
         comparators = new ConcurrentHashMap<>();
         items = new CopyOnWriteArrayList<>();
@@ -57,6 +61,13 @@ public class BillDataService extends DataService<Bill> {
         comparators.put(BY_CLIENT_ID, Comparator.comparing(Bill::getClientId));
         comparators.put(BY_PURCHASE_DATE_TIME, Comparator.comparing(Bill::getPurchaseDateTime));
         comparators.put(BY_TOTAL_PRICE, Comparator.comparing(Bill::getTotalPrice));
+    }
 
+    public ClientDataService getClientData() {
+        return clientData;
+    }
+
+    public DeviceDataService getDeviceData() {
+        return deviceData;
     }
 }

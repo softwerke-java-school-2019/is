@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ru.softwerke.shop.Utils.DeviceDeserializer;
 import ru.softwerke.shop.Utils.DeviceSerializer;
+import ru.softwerke.shop.service.DeviceDataService;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ public class Device extends Item {
     public static final String NAME_FIELD = "name";
     public static final String RELEASED_FIELD = "released";
     public static final String COLOR_FIELD = "color";
+    public static final String COLOR_RGB_FIELD = "color";
     public static final String TYPE_FIELD = "type";
     public static final String PRICE_FIELD = "price";
 
@@ -75,6 +77,10 @@ public class Device extends Item {
 
     public BigDecimal getPrice() {
         return price;
+    }
+
+    public int getColorRGB() {
+        return DeviceDataService.colors.get(color).getRGB();
     }
 
     @Override

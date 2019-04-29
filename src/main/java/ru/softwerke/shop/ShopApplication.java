@@ -12,41 +12,46 @@ import javax.ws.rs.ApplicationPath;
 
 @ApplicationPath("/")
 public class ShopApplication extends ResourceConfig {
+
     public ShopApplication() {
         packages("ru.softwerke.shop;com.fasterxml.jackson.jaxrs");
 
+        ClientDataService clientData = new ClientDataService();
+        DeviceDataService deviceData = new DeviceDataService();
+        BillDataService billData = new BillDataService(deviceData, clientData);
+
         register(new AbstractBinder() {
             @Override
             protected void configure() {
-                bind(clientService()).to(ClientDataService.class);
+                bind(clientService(clientData)).to(ClientDataService.class);
             }
         });
 
         register(new AbstractBinder() {
             @Override
             protected void configure() {
-                bind(deviceService()).to(DeviceDataService.class);
+                bind(deviceService(deviceData)).to(DeviceDataService.class);
             }
         });
 
         register(new AbstractBinder() {
             @Override
             protected void configure() {
-                bind(billService()).to(BillDataService.class);
+                bind(billService(billData)).to(BillDataService.class);
             }
         });
     }
 
-    private ClientDataService clientService(){
-        return new ClientDataService();
+    private ClientDataService clientService(ClientDataService clientData){
+        return clientData;
     }
 
-    private DeviceDataService deviceService(){
-        return new DeviceDataService();
+    private DeviceDataService deviceService(DeviceDataService deviceData){
+        return deviceData;
     }
 
-    private BillDataService billService() {
-        return new BillDataService();
+    private BillDataService billService(BillDataService billData) {
+        return billData;
     }
 
 }

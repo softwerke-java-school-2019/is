@@ -11,9 +11,12 @@ public class BillItem {
     private long quantity;
     private BigDecimal price;
 
-    public BillItem(long deviceId, long quantity, BigDecimal price) {
+    public BillItem(long deviceId, long quantity) {
         this.deviceId = deviceId;
         this.quantity = quantity;
+    }
+
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

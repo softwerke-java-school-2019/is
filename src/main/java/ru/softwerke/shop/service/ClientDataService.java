@@ -21,9 +21,9 @@ public class ClientDataService extends DataService<Client> {
         comparators = new ConcurrentHashMap<>();
         items = new CopyOnWriteArrayList<>();
 
-        predicates.put(BY_NAME, term -> client -> client.getName().startsWith(term));
-        predicates.put(BY_SECOND_NAME, term -> client -> client.getSecondName().startsWith(term));
-        predicates.put(BY_PATRONYMIC, term -> client -> client.getPatronymic().startsWith(term));
+        predicates.put(BY_NAME, term -> client -> client.getName().equals(term));
+        predicates.put(BY_SECOND_NAME, term -> client -> client.getSecondName().equals(term));
+        predicates.put(BY_PATRONYMIC, term -> client -> client.getPatronymic().equals(term));
         predicates.put(BY_BIRTHDATE_FROM, term -> {
             LocalDate date = ServiceUtils.parseDate(term, ServiceUtils.dateFormatter);
 

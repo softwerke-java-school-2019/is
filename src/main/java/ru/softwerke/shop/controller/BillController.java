@@ -37,7 +37,7 @@ public class BillController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Bill createBill(Bill bill) throws RequestException {
-        ModelUtils.checkBill(bill);
+        ModelUtils.checkBill(bill, data.getClientData(), data.getDeviceData());
         return data.addItem(bill);
     }
 
