@@ -18,7 +18,7 @@ public class Device extends Item {
 
     public static final String COMPANY_FIELD = "manufacturer";
     public static final String NAME_FIELD = "modelName";
-    public static final String RELEASED_FIELD = "released";
+    public static final String RELEASED_FIELD = "manufactureDate";
     public static final String COLOR_FIELD = "colorName";
     public static final String COLOR_RGB_FIELD = "colorRGB";
     public static final String TYPE_FIELD = "deviceType";
