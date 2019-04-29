@@ -1,10 +1,12 @@
 package ru.softwerke.shop.service;
 
 import org.eclipse.jetty.util.StringUtil;
+import ru.softwerke.shop.Utils.ServiceUtils;
 import ru.softwerke.shop.controller.RequestException;
 import ru.softwerke.shop.model.Item;
 
 import javax.ws.rs.core.MultivaluedMap;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -13,13 +15,14 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public abstract class DataService<T extends Item> {
+public class DataService<T extends Item> {
     private static final String PAGE = "page";
     private static final String COUNT = "count";
     private static final String ORDER_BY = "orderBy";
     static final String BY_ID = "id";
 
-    private static final byte DEFAULT_COUNT = 50;
+    private static final long DEFAULT_COUNT = 10;
+    private static final long MAX_COUNT = 1000;
 
 
     CopyOnWriteArrayList<T> items;
@@ -46,7 +49,7 @@ public abstract class DataService<T extends Item> {
         count = parseCount(queryParams);
         page = parsePage(queryParams);
 
-        Comparator<T> comparator = getComparator(queryParams);
+        List<Comparator<T>> sorts = getComparators(queryParams);
 
         Stream<T> stream = items.stream();
 
@@ -66,27 +69,38 @@ public abstract class DataService<T extends Item> {
             stream = stream.filter(predicate.apply(entry.getValue().get(0)));
         }
 
-        return stream.sorted(comparator).skip(page * count).limit(count).collect(Collectors.toList());
+        for (Comparator<T> comparator : sorts) {
+            stream = stream.sorted(comparator).skip(page * count).limit(count);
+        }
+        return stream.collect(Collectors.toList());
     }
 
-    private Comparator<T> getComparator(MultivaluedMap<String, String> queryParams) throws RequestException {
-        String orderBy = queryParams.getFirst(ORDER_BY);
+    private List<Comparator<T>> getComparators(MultivaluedMap<String, String> queryParams) throws RequestException {
+        List<String> sorts = queryParams.get(ORDER_BY);
+        List<Comparator<T>> result = new ArrayList<>();
 
-        if (StringUtil.isNotBlank(orderBy)) {
-            boolean reversed = false;
-            if (orderBy.charAt(0) == '-') {
-                orderBy = orderBy.substring(1);
-                reversed = true;
-            }
-
-            Comparator<T> comparator = comparators.get(orderBy);
-            if (comparator == null){
-                throw new RequestException("Illegal parameter value.\norderBy: " + orderBy);
-            }
-
-            return (reversed ? comparator.reversed() : comparator);
+        if (sorts == null) {
+            result.add(comparators.get(BY_ID));
+            return result;
         }
-        return comparators.get(BY_ID);
+
+        for (String orderBy : sorts) {
+            if (StringUtil.isNotBlank(orderBy)) {
+                boolean reversed = false;
+                if (orderBy.charAt(0) == '-') {
+                    orderBy = orderBy.substring(1);
+                    reversed = true;
+                }
+
+                Comparator<T> comparator = comparators.get(orderBy);
+                if (comparator == null) {
+                    throw new RequestException("Illegal parameter value.\norderBy: " + orderBy);
+                }
+
+                result.add(reversed ? comparator.reversed() : comparator);
+            }
+        }
+        return result;
     }
 
     private long parseCount(MultivaluedMap<String, String> queryParams) throws RequestException {
@@ -98,6 +112,10 @@ public abstract class DataService<T extends Item> {
                 throw new RequestException("Positive number expected, instead: " + countStr);
             }
 
+            if (count > MAX_COUNT) {
+                throw new RequestException("Max count is " + MAX_COUNT);
+            }
+
             return count;
         }
         return this.count;
@@ -107,7 +125,7 @@ public abstract class DataService<T extends Item> {
         String pageStr = queryParams.getFirst(PAGE);
 
         if (StringUtil.isNotBlank(pageStr)) {
-            long page = ServiceUtils.parseNumber(pageStr, Long::parseLong);
+            long page = ServiceUtils.parseNumber(pageStr, Long::parseLong) - 1;
             if (page < 0) {
                 throw new RequestException("Non negative number expected, instead: " + pageStr);
             }

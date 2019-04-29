@@ -1,5 +1,7 @@
 package ru.softwerke.shop.service;
 
+import ru.softwerke.shop.Utils.ServiceUtils;
+import ru.softwerke.shop.controller.RequestException;
 import ru.softwerke.shop.model.Device;
 
 import java.awt.*;
@@ -47,12 +49,12 @@ public class DeviceDataService extends DataService<Device> {
         predicates.put(BY_COLOR, term -> device -> device.getColor().equals(term));
         predicates.put(BY_TYPE, term -> device -> device.getType().equals(term));
         predicates.put(BY_RELEASED_FROM, term ->  {
-            LocalDate date = ServiceUtils.parseDate(term);
+            LocalDate date = ServiceUtils.parseDate(term, ServiceUtils.dateFormatter);
 
             return device -> device.getReleased().compareTo(date) >= 0;
         });
         predicates.put(BY_RELEASED_TO, term -> {
-            LocalDate date = ServiceUtils.parseDate(term);
+            LocalDate date = ServiceUtils.parseDate(term, ServiceUtils.dateFormatter);
 
             return device -> device.getReleased().compareTo(date) <= 0;
         });
@@ -76,11 +78,17 @@ public class DeviceDataService extends DataService<Device> {
         comparators.put(BY_TYPE, Comparator.comparing(Device::getType));
     }
 
-    public static void addColor(String name, Color color) {
+    public static void addColor(String name, Color color) throws RequestException {
+        if (colors.keySet().contains(name)) {
+            throw new RequestException("Color " + name + " already exists");
+        }
         colors.put(name, color);
     }
 
-    public static void addType(String type) {
+    public static void addType(String type) throws RequestException {
+        if (types.contains(type)) {
+            throw new RequestException("Type " + type + " already exists");
+        }
         types.add(type);
     }
 }

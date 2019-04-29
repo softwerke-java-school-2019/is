@@ -1,49 +1,46 @@
 package ru.softwerke.shop.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ru.softwerke.shop.Utils.DeviceDeserializer;
+import ru.softwerke.shop.Utils.DeviceSerializer;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 
+@JsonSerialize(using = DeviceSerializer.class)
+@JsonDeserialize(using = DeviceDeserializer.class)
 public class Device extends Item {
+    private static AtomicLong currentID = new AtomicLong(0);
 
-    private static final String COMPANY_FIELD = "company";
-    private static final String NAME_FIELD = "name";
-    private static final String RELEASED_FIELD = "released";
-    private static final String COLOR_FIELD = "color";
-    private static final String TYPE_FIELD = "type";
-    private static final String PRICE_FIELD = "price";
+    public static final String COMPANY_FIELD = "company";
+    public static final String NAME_FIELD = "name";
+    public static final String RELEASED_FIELD = "released";
+    public static final String COLOR_FIELD = "color";
+    public static final String TYPE_FIELD = "type";
+    public static final String PRICE_FIELD = "price";
 
-    @JsonProperty(COMPANY_FIELD)
     private String company;
 
-    @JsonProperty(NAME_FIELD)
     private String name;
 
-    @JsonProperty(RELEASED_FIELD)
-    @JsonSerialize(using = DateSerializer.class)
-    @JsonDeserialize(using = DateDeserializer.class)
     private LocalDate released;
 
-    @JsonProperty(COLOR_FIELD)
     private String color;
 
-    @JsonProperty(TYPE_FIELD)
     private String type;
 
-    @JsonProperty(PRICE_FIELD)
     private BigDecimal price;
 
-    public Device(@JsonProperty(COMPANY_FIELD) String company,
-                  @JsonProperty(NAME_FIELD) String name,
-                  @JsonProperty(COLOR_FIELD) String color,
-                  @JsonProperty(TYPE_FIELD) String type,
-                  @JsonProperty(RELEASED_FIELD) LocalDate released,
-                  @JsonProperty(PRICE_FIELD) BigDecimal price) {
-        super();
+    public Device(String company,
+                  String name,
+                  String color,
+                  String type,
+                  LocalDate released,
+                  BigDecimal price) {
+        this.id = currentID.getAndIncrement();
         this.company = company;
         this.name = name;
         this.released = released;

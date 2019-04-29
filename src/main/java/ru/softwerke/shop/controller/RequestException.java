@@ -6,9 +6,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
+import java.io.IOException;
 
 @Provider
-public class RequestException extends Exception implements ExceptionMapper<RequestException> {
+public class RequestException extends IOException implements ExceptionMapper<RequestException> {
     private static final long serialVersionUID = 1L;
 
     public RequestException() {

@@ -1,9 +1,10 @@
-package ru.softwerke.shop.service;
+package ru.softwerke.shop.Utils;
 
 import ru.softwerke.shop.controller.RequestException;
 
 import java.time.DateTimeException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Function;
 
@@ -16,14 +17,24 @@ public class ServiceUtils {
         }
     }
 
-    public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    public static final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    public static final DateTimeFormatter dateWithTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
 
-    public static LocalDate parseDate(String dateStr) throws RequestException {
+    public static LocalDate parseDate(String dateStr, DateTimeFormatter formatter) throws RequestException {
         try {
             return LocalDate.parse(dateStr, formatter);
         } catch (DateTimeException ex) {
             throw new RequestException("Invalid date format: " + dateStr);
         }
     }
+
+    public static LocalDateTime parseDateTime(String dateStr, DateTimeFormatter formatter) throws RequestException {
+        try {
+            return LocalDateTime.parse(dateStr, formatter);
+        } catch (DateTimeException ex) {
+            throw new RequestException("Invalid date format: " + dateStr);
+        }
+    }
+
 }

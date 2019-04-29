@@ -1,50 +1,46 @@
 package ru.softwerke.shop.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import ru.softwerke.shop.Utils.ClientDeserializer;
+import ru.softwerke.shop.Utils.ClientSerializer;
 
 /**
  * Class <code>Client</code>  contains information about shop client
  *
  * @authorIlfat
  */
-
+@JsonSerialize(using = ClientSerializer.class)
+@JsonDeserialize(using = ClientDeserializer.class)
 public class Client extends Item {
+    private static AtomicLong currentID = new AtomicLong(0);
 
-    private static final String SECONDNAME_FIELD = "secondName";
-    private static final String NAME_FIELD = "name";
-    private static final String PATRONYMIC_FIELD = "patronymic";
-    private static final String BIRTHDAY_FIELD = "birthday";
+    public static final String SECONDNAME_FIELD = "secondName";
+    public static final String NAME_FIELD = "name";
+    public static final String PATRONYMIC_FIELD = "patronymic";
+    public static final String BIRTHDAY_FIELD = "birthday";
 
-    @JsonProperty(NAME_FIELD)
     private String name;
 
-    @JsonProperty(SECONDNAME_FIELD)
     private String secondName;
 
-    @JsonProperty(PATRONYMIC_FIELD)
     private String patronymic;
 
     /**
      * Date format (dd.MM.yyyy)
      */
-    @JsonProperty(BIRTHDAY_FIELD)
-    @JsonSerialize(using = DateSerializer.class)
-    @JsonDeserialize(using = DateDeserializer.class)
     private LocalDate birthday;
 
-    @JsonCreator
-    public Client (@JsonProperty(SECONDNAME_FIELD) String secondName,
-                   @JsonProperty(NAME_FIELD) String name,
-                   @JsonProperty(PATRONYMIC_FIELD) String patronymic,
-                   @JsonProperty(BIRTHDAY_FIELD) LocalDate birthday) {
-        super();
+    public Client (String secondName,
+                   String name,
+                   String patronymic,
+                   LocalDate birthday) {
+        this.id = currentID.getAndIncrement();
         this.name = name;
         this.secondName = secondName;
         this.patronymic = patronymic;

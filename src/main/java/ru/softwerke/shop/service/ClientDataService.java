@@ -1,9 +1,9 @@
 package ru.softwerke.shop.service;
 
+import ru.softwerke.shop.Utils.ServiceUtils;
 import ru.softwerke.shop.model.Client;
 import java.time.LocalDate;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -24,15 +24,15 @@ public class ClientDataService extends DataService<Client> {
         predicates.put(BY_NAME, term -> client -> client.getName().startsWith(term));
         predicates.put(BY_SECOND_NAME, term -> client -> client.getSecondName().startsWith(term));
         predicates.put(BY_PATRONYMIC, term -> client -> client.getPatronymic().startsWith(term));
-        predicates.put(BY_BIRTHDATE_FROM, term -> client -> {
-            LocalDate date = LocalDate.parse(term, ServiceUtils.formatter);
+        predicates.put(BY_BIRTHDATE_FROM, term -> {
+            LocalDate date = ServiceUtils.parseDate(term, ServiceUtils.dateFormatter);
 
-            return client.getBirthday().compareTo(date) >= 0;
+            return client -> client.getBirthday().compareTo(date) >= 0;
         });
-        predicates.put(BY_BIRTHDATE_TO, term -> client -> {
-            LocalDate date = LocalDate.parse(term, ServiceUtils.formatter);
+        predicates.put(BY_BIRTHDATE_TO, term -> {
+            LocalDate date = ServiceUtils.parseDate(term, ServiceUtils.dateFormatter);
 
-            return client.getBirthday().compareTo(date) <= 0;
+            return client -> client.getBirthday().compareTo(date) <= 0;
         });
 
         comparators.put(BY_ID, Comparator.comparing(Client::getId));
