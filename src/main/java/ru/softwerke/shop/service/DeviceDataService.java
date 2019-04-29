@@ -14,13 +14,13 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DeviceDataService extends DataService<Device> {
-    private static final String BY_COMPANY = "company";
-    private static final String BY_NAME = "name";
-    private static final String BY_RELEASED = "released";
-    private static final String BY_RELEASED_FROM = "releasedFrom";
-    private static final String BY_RELEASED_TO = "releasedTo";
-    private static final String BY_COLOR= "color";
-    private static final String BY_TYPE = "type";
+    private static final String BY_COMPANY = "manufacturer";
+    private static final String BY_NAME = "modelName";
+    private static final String BY_RELEASED = "manufactureDate";
+    private static final String BY_RELEASED_FROM = "manufactureDateFrom";
+    private static final String BY_RELEASED_TO = "manufactureDateTo";
+    private static final String BY_COLOR= "colorName";
+    private static final String BY_TYPE = "deviceType";
     private static final String BY_PRICE = "price";
     private static final String BY_PRICE_FROM = "priceFrom";
     private static final String BY_PRICE_TO = "priceTo";

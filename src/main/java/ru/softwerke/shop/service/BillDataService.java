@@ -11,13 +11,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BillDataService extends DataService<Bill> {
 
-    private static final String BY_CLIENT_ID = "clientId";
+    private static final String BY_CLIENT_ID = "customerId";
     private static final String BY_TOTAL_PRICE_FROM = "totalPriceFrom";
     private static final String BY_TOTAL_PRICE_TO = "totalPriceTo";
     private static final String BY_TOTAL_PRICE = "totalPrice";
-    private static final String BY_PURCHASE_DATE_TIME_FROM = "dateFrom";
-    private static final String BY_PURCHASE_DATE_TIME_TO = "dateTo";
-    private static final String BY_PURCHASE_DATE_TIME = "date";
+    private static final String BY_PURCHASE_DATE_TIME_FROM = "purchaseDateTimeFrom";
+    private static final String BY_PURCHASE_DATE_TIME_TO = "purchaseDateTimeTo";
+    private static final String BY_PURCHASE_DATE_TIME = "purchaseDateTime";
 
     private final ClientDataService clientData;
     private final DeviceDataService deviceData;

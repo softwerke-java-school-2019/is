@@ -15,8 +15,8 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Bill extends Item {
     private static AtomicLong currentID = new AtomicLong(0);
 
-    public static String CLIENT_ID_FIELD = "clientId";
-    public static String PURCHASE_DATE_TIME_FIELD = "date";
+    public static String CLIENT_ID_FIELD = "customerId";
+    public static String PURCHASE_DATE_TIME_FIELD = "purchaseDateTime";
     public static String TOTAL_PRICE_FIELD = "totalPrice";
     public static String ITEMS_FIELD = "items";
 

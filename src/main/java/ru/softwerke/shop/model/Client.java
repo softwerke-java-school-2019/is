@@ -15,10 +15,10 @@ import ru.softwerke.shop.Utils.ClientSerializer;
 public class Client extends Item {
     private static AtomicLong currentID = new AtomicLong(0);
 
-    public static final String SECONDNAME_FIELD = "secondName";
-    public static final String NAME_FIELD = "name";
-    public static final String PATRONYMIC_FIELD = "patronymic";
-    public static final String BIRTHDAY_FIELD = "birthday";
+    public static final String SECONDNAME_FIELD = "middleName";
+    public static final String NAME_FIELD = "firstName";
+    public static final String PATRONYMIC_FIELD = "lastName";
+    public static final String BIRTHDAY_FIELD = "birthdate";
 
     private String name;
 

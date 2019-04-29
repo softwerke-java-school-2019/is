@@ -16,12 +16,12 @@ import java.util.concurrent.atomic.AtomicLong;
 public class Device extends Item {
     private static AtomicLong currentID = new AtomicLong(0);
 
-    public static final String COMPANY_FIELD = "company";
-    public static final String NAME_FIELD = "name";
+    public static final String COMPANY_FIELD = "manufacturer";
+    public static final String NAME_FIELD = "modelName";
     public static final String RELEASED_FIELD = "released";
-    public static final String COLOR_FIELD = "color";
-    public static final String COLOR_RGB_FIELD = "color";
-    public static final String TYPE_FIELD = "type";
+    public static final String COLOR_FIELD = "colorName";
+    public static final String COLOR_RGB_FIELD = "colorRGB";
+    public static final String TYPE_FIELD = "deviceType";
     public static final String PRICE_FIELD = "price";
 
     private String company;

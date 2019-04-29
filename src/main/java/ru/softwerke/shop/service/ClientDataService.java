@@ -9,12 +9,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ClientDataService extends DataService<Client> {
 
-    private static final String BY_NAME = "name";
-    private static final String BY_SECOND_NAME = "secondName";
-    private static final String BY_PATRONYMIC = "patronymic";
-    private static final String BY_BIRTHDATE_FROM = "birthdayFrom";
-    private static final String BY_BIRTHDATE_TO = "birthdayTo";
-    private static final String BY_BIRTHDATE = "birthday";
+    private static final String BY_NAME = "firstName";
+    private static final String BY_SECOND_NAME = "middleName";
+    private static final String BY_PATRONYMIC = "lastName";
+    private static final String BY_BIRTHDATE_FROM = "birthdateFrom";
+    private static final String BY_BIRTHDATE_TO = "birthdateTo";
+    private static final String BY_BIRTHDATE = "birthdate";
 
     public ClientDataService() {
         predicates = new ConcurrentHashMap<>();
