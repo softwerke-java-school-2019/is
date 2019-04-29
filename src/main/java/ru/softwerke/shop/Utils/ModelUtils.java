@@ -11,6 +11,9 @@ import ru.softwerke.shop.service.DeviceDataService;
 
 import java.math.BigDecimal;
 
+/**
+ * Class contains utils for checking items validity
+ */
 public class ModelUtils {
     public static void checkClient(Client client) throws RequestException {
         if (StringUtil.isBlank(client.getName()) || client.getName().startsWith(" ")) {

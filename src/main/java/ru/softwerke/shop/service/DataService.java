@@ -15,6 +15,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Data service for items
+ */
 public class DataService<T extends Item> {
     private static final String PAGE = "page";
     private static final String COUNT = "count";
@@ -45,6 +48,15 @@ public class DataService<T extends Item> {
         return items;
     }
 
+    /**
+     * Returns list of items matching filters from query params
+     * Predicates and comparators defined in implementing class
+     * Result devides on pages
+     *
+     * @param queryParams
+     * @return List<Item>
+     * @throws RequestException
+     */
     public  List<T> getList(MultivaluedMap<String, String> queryParams) throws RequestException {
         count = parseCount(queryParams);
         page = parsePage(queryParams);

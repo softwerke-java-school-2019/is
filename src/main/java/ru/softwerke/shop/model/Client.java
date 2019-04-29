@@ -10,11 +10,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import ru.softwerke.shop.Utils.ClientDeserializer;
 import ru.softwerke.shop.Utils.ClientSerializer;
 
-/**
- * Class <code>Client</code>  contains information about shop client
- *
- * @authorIlfat
- */
 @JsonSerialize(using = ClientSerializer.class)
 @JsonDeserialize(using = ClientDeserializer.class)
 public class Client extends Item {

@@ -65,7 +65,7 @@ public class DeviceController {
         try {
             JSONObject json = new JSONObject(jsonStr);
             DeviceDataService.addColor(json.getString("name"),
-                    new Color(json.getInt("r"), json.getInt("g"), json.getInt("b")));
+                    new Color(json.getInt("rgb")));
         } catch (JSONException ex) {
             throw new RequestException("Wrong json format");
         }
