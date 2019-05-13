@@ -7,8 +7,8 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
-import ru.softwerke.shop.Utils.ClientDeserializer;
-import ru.softwerke.shop.Utils.ClientSerializer;
+import ru.softwerke.shop.utils.ClientDeserializer;
+import ru.softwerke.shop.utils.ClientSerializer;
 
 @JsonSerialize(using = ClientSerializer.class)
 @JsonDeserialize(using = ClientDeserializer.class)

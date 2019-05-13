@@ -1,7 +1,7 @@
 package ru.softwerke.shop.controller;
 
 import ru.softwerke.shop.model.Client;
-import ru.softwerke.shop.Utils.ModelUtils;
+import ru.softwerke.shop.utils.ModelUtils;
 import ru.softwerke.shop.service.ClientDataService;
 
 import javax.inject.Inject;

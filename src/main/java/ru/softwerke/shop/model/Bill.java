@@ -2,8 +2,8 @@ package ru.softwerke.shop.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import ru.softwerke.shop.Utils.BillDeserializer;
-import ru.softwerke.shop.Utils.BillSerializer;
+import ru.softwerke.shop.utils.BillDeserializer;
+import ru.softwerke.shop.utils.BillSerializer;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

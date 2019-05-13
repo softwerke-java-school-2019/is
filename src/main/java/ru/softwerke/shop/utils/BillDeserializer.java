@@ -1,4 +1,4 @@
-package ru.softwerke.shop.Utils;
+package ru.softwerke.shop.utils;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -11,7 +11,6 @@ import ru.softwerke.shop.model.Bill;
 import ru.softwerke.shop.model.BillItem;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 

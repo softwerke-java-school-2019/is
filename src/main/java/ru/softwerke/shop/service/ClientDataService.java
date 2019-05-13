@@ -1,6 +1,6 @@
 package ru.softwerke.shop.service;
 
-import ru.softwerke.shop.Utils.ServiceUtils;
+import ru.softwerke.shop.utils.ServiceUtils;
 import ru.softwerke.shop.model.Client;
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -9,12 +9,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ClientDataService extends DataService<Client> {
 
-    private static final String BY_NAME = Client.NAME_FIELD;
-    private static final String BY_SECOND_NAME = Client.SECONDNAME_FIELD;
-    private static final String BY_PATRONYMIC = Client.PATRONYMIC_FIELD;
-    private static final String BY_BIRTHDATE_FROM = Client.BIRTHDAY_FIELD + "From";
-    private static final String BY_BIRTHDATE_TO = Client.BIRTHDAY_FIELD + "To";
-    private static final String BY_BIRTHDATE = Client.BIRTHDAY_FIELD;
+    public static final String BY_NAME = Client.NAME_FIELD;
+    public static final String BY_SECOND_NAME = Client.SECONDNAME_FIELD;
+    public static final String BY_PATRONYMIC = Client.PATRONYMIC_FIELD;
+    public static final String BY_BIRTHDATE_FROM = Client.BIRTHDAY_FIELD + "From";
+    public static final String BY_BIRTHDATE_TO = Client.BIRTHDAY_FIELD + "To";
+    public static final String BY_BIRTHDATE = Client.BIRTHDAY_FIELD;
 
     public ClientDataService() {
         predicates = new ConcurrentHashMap<>();

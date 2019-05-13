@@ -2,7 +2,7 @@ package ru.softwerke.shop.service;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import ru.softwerke.shop.Utils.ServiceUtils;
+import ru.softwerke.shop.utils.ServiceUtils;
 import ru.softwerke.shop.controller.RequestException;
 import ru.softwerke.shop.model.Device;
 

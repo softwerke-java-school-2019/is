@@ -1,4 +1,4 @@
-package ru.softwerke.shop.Utils;
+package ru.softwerke.shop.utils;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

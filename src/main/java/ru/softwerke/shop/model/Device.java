@@ -2,8 +2,8 @@ package ru.softwerke.shop.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import ru.softwerke.shop.Utils.DeviceDeserializer;
-import ru.softwerke.shop.Utils.DeviceSerializer;
+import ru.softwerke.shop.utils.DeviceDeserializer;
+import ru.softwerke.shop.utils.DeviceSerializer;
 import ru.softwerke.shop.service.DeviceDataService;
 
 import java.math.BigDecimal;

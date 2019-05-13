@@ -1,4 +1,4 @@
-package ru.softwerke.shop.Utils;
+package ru.softwerke.shop.utils;
 
 import org.eclipse.jetty.util.StringUtil;
 import ru.softwerke.shop.controller.RequestException;

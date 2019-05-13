@@ -1,8 +1,7 @@
 package ru.softwerke.shop.controller;
 
-import ru.softwerke.shop.Utils.ModelUtils;
+import ru.softwerke.shop.utils.ModelUtils;
 import ru.softwerke.shop.model.Bill;
-import ru.softwerke.shop.model.Client;
 import ru.softwerke.shop.service.BillDataService;
 
 import javax.inject.Inject;

@@ -1,4 +1,4 @@
-package ru.softwerke.shop.Utils;
+package ru.softwerke.shop.utils;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

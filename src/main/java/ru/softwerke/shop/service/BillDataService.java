@@ -1,6 +1,6 @@
 package ru.softwerke.shop.service;
 
-import ru.softwerke.shop.Utils.ServiceUtils;
+import ru.softwerke.shop.utils.ServiceUtils;
 import ru.softwerke.shop.model.Bill;
 import ru.softwerke.shop.model.BillItem;
 

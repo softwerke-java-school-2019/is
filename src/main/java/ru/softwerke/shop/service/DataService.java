@@ -1,7 +1,7 @@
 package ru.softwerke.shop.service;
 
 import org.eclipse.jetty.util.StringUtil;
-import ru.softwerke.shop.Utils.ServiceUtils;
+import ru.softwerke.shop.utils.ServiceUtils;
 import ru.softwerke.shop.controller.RequestException;
 import ru.softwerke.shop.model.Item;
 
@@ -16,9 +16,9 @@ import java.util.stream.Stream;
  * Data service for items
  */
 public class DataService<T extends Item> {
-    private static final String PAGE = "page";
-    private static final String COUNT = "count";
-    private static final String ORDER_BY = "orderBy";
+    public static final String PAGE = "page";
+    public static final String COUNT = "count";
+    public static final String ORDER_BY = "orderBy";
     static final String BY_ID = "id";
 
     private static final long DEFAULT_COUNT = 10;
