@@ -16,34 +16,34 @@ import java.math.BigDecimal;
  */
 public class ModelUtils {
     public static void checkClient(Client client) throws RequestException {
-        if (StringUtil.isBlank(client.getName()) || client.getName().startsWith(" ")) {
+        if (StringUtil.isBlank(client.getName())) {
             throw new RequestException("name field is incorrect");
         }
 
-        if (StringUtil.isBlank(client.getSecondName()) || client.getSecondName().startsWith(" ")) {
+        if (StringUtil.isBlank(client.getSecondName())) {
             throw new RequestException("secondName field is incorrect");
         }
 
-        if (StringUtil.isBlank(client.getPatronymic()) || client.getPatronymic().startsWith(" ")) {
+        if (StringUtil.isBlank(client.getPatronymic())) {
             throw new RequestException("patronymic field is incorrect");
         }
     }
 
     public static void checkDevice(Device device) throws RequestException {
 
-        if (StringUtil.isBlank(device.getCompany()) || device.getCompany().startsWith(" ")) {
+        if (StringUtil.isBlank(device.getCompany())) {
             throw new RequestException("company field is incorrect");
         }
 
-        if (StringUtil.isBlank(device.getName()) || device.getCompany().startsWith(" ")) {
+        if (StringUtil.isBlank(device.getName())) {
             throw new RequestException("name field is incorrect");
         }
 
-        if (StringUtil.isBlank(device.getType()) || device.getType().startsWith(" ")) {
+        if (StringUtil.isBlank(device.getType())) {
             throw new RequestException("type field is incorrect");
         }
 
-        if (StringUtil.isBlank(device.getColor()) || device.getColor().startsWith(" ")) {
+        if (StringUtil.isBlank(device.getColor())) {
             throw new RequestException("color field is incorrect");
         }
 
@@ -62,13 +62,13 @@ public class ModelUtils {
 
     public static void checkBill(Bill bill, ClientDataService clientData, DeviceDataService deviceData) throws RequestException {
         if (clientData.getItemById(bill.getClientId()) == null) {
-            throw new RequestException("No client with " + bill.getClientId() + " id");
+            throw new RequestException("No client with id: " + bill.getClientId());
         }
 
         for (BillItem item : bill.getItems()) {
             Device device = deviceData.getItemById(item.getDeviceId());
             if (device == null) {
-                throw new RequestException("No device with " + item.getDeviceId() + " id");
+                throw new RequestException("No device with id: " + item.getDeviceId());
             }
 
             if (item.getQuantity() < 1) {

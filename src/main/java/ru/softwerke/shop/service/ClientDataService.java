@@ -9,12 +9,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ClientDataService extends DataService<Client> {
 
-    private static final String BY_NAME = "firstName";
-    private static final String BY_SECOND_NAME = "middleName";
-    private static final String BY_PATRONYMIC = "lastName";
-    private static final String BY_BIRTHDATE_FROM = "birthdateFrom";
-    private static final String BY_BIRTHDATE_TO = "birthdateTo";
-    private static final String BY_BIRTHDATE = "birthdate";
+    private static final String BY_NAME = Client.NAME_FIELD;
+    private static final String BY_SECOND_NAME = Client.SECONDNAME_FIELD;
+    private static final String BY_PATRONYMIC = Client.PATRONYMIC_FIELD;
+    private static final String BY_BIRTHDATE_FROM = Client.BIRTHDAY_FIELD + "From";
+    private static final String BY_BIRTHDATE_TO = Client.BIRTHDAY_FIELD + "To";
+    private static final String BY_BIRTHDATE = Client.BIRTHDAY_FIELD;
 
     public ClientDataService() {
         predicates = new ConcurrentHashMap<>();
@@ -33,6 +33,11 @@ public class ClientDataService extends DataService<Client> {
             LocalDate date = ServiceUtils.parseDate(term, ServiceUtils.dateFormatter);
 
             return client -> client.getBirthday().compareTo(date) <= 0;
+        });
+        predicates.put(BY_BIRTHDATE, term -> {
+            LocalDate date = ServiceUtils.parseDate(term, ServiceUtils.dateFormatter);
+
+            return client -> client.getBirthday().compareTo(date) == 0;
         });
 
         comparators.put(BY_ID, Comparator.comparing(Client::getId));

@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.List;
 
-@Path("/client")
+@Path("/customer")
 public class ClientController {
     private ClientDataService data;
 
@@ -27,7 +27,7 @@ public class ClientController {
     public Response getClient(@PathParam("id") long id) {
         Client client = data.getItemById(id);
         if (client == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("No client with " + id + " id" ).build();
+            return Response.status(Response.Status.NOT_FOUND).entity("No client with id: " + id ).build();
         }
         return Response.status(Response.Status.OK).entity(client).build();
     }
@@ -52,9 +52,5 @@ public class ClientController {
             return Response.status(Response.Status.NOT_FOUND).entity("No clients matching filters").build();
         }
         return Response.status(Response.Status.OK).entity(result).build();
-    }
-
-    public ClientDataService getData() {
-        return data;
     }
 }

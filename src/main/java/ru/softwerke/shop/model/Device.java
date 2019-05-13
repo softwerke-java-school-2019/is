@@ -83,6 +83,18 @@ public class Device extends Item {
         return DeviceDataService.colors.get(color).getRGB();
     }
 
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

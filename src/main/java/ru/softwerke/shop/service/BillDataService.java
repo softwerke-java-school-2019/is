@@ -2,6 +2,7 @@ package ru.softwerke.shop.service;
 
 import ru.softwerke.shop.Utils.ServiceUtils;
 import ru.softwerke.shop.model.Bill;
+import ru.softwerke.shop.model.BillItem;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -11,13 +12,21 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BillDataService extends DataService<Bill> {
 
-    private static final String BY_CLIENT_ID = "customerId";
-    private static final String BY_TOTAL_PRICE_FROM = "totalPriceFrom";
-    private static final String BY_TOTAL_PRICE_TO = "totalPriceTo";
-    private static final String BY_TOTAL_PRICE = "totalPrice";
-    private static final String BY_PURCHASE_DATE_TIME_FROM = "purchaseDateTimeFrom";
-    private static final String BY_PURCHASE_DATE_TIME_TO = "purchaseDateTimeTo";
-    private static final String BY_PURCHASE_DATE_TIME = "purchaseDateTime";
+    private static final String BY_CLIENT_ID = Bill.CLIENT_ID_FIELD;
+    private static final String BY_TOTAL_PRICE_FROM = Bill.TOTAL_PRICE_FIELD + "From";
+    private static final String BY_TOTAL_PRICE_TO = Bill.TOTAL_PRICE_FIELD + "To";
+    private static final String BY_TOTAL_PRICE = Bill.TOTAL_PRICE_FIELD;
+    private static final String BY_PURCHASE_DATE_TIME_FROM = Bill.PURCHASE_DATE_TIME_FIELD + "From";
+    private static final String BY_PURCHASE_DATE_TIME_TO = Bill.PURCHASE_DATE_TIME_FIELD + "To";
+    private static final String BY_PURCHASE_DATE_TIME = Bill.PURCHASE_DATE_TIME_FIELD;
+    private static final String BY_DEVICE_ID = BillItem.DEVICE_ID_FIELD;
+    private static final String BY_PRICE_FROM = BillItem.PRICE_FIELD + "From";
+    private static final String BY_PRICE_TO = BillItem.PRICE_FIELD + "To";
+    private static final String BY_PRICE = BillItem.PRICE_FIELD ;
+    private static final String BY_QUANTITY_FROM = BillItem.QUANTITY_FIELD + "From";
+    private static final String BY_QUANTITY_TO = BillItem.QUANTITY_FIELD + "To";
+    private static final String BY_QUANTITY = BillItem.QUANTITY_FIELD;
+
 
     private final ClientDataService clientData;
     private final DeviceDataService deviceData;
@@ -46,6 +55,11 @@ public class BillDataService extends DataService<Bill> {
 
             return bill -> bill.getTotalPrice().compareTo(priceTo) <= 0;
         });
+        predicates.put(BY_TOTAL_PRICE, term -> {
+            BigDecimal price = ServiceUtils.parseNumber(term, BigDecimal::new);
+
+            return bill -> bill.getTotalPrice().compareTo(price) == 0;
+        });
         predicates.put(BY_PURCHASE_DATE_TIME_FROM, term -> {
             LocalDateTime date = ServiceUtils.parseDateTime(term, ServiceUtils.dateWithTimeFormatter);
 
@@ -55,6 +69,46 @@ public class BillDataService extends DataService<Bill> {
             LocalDateTime date = ServiceUtils.parseDateTime(term, ServiceUtils.dateWithTimeFormatter);
 
             return bill -> bill.getPurchaseDateTime().compareTo(date) <= 0;
+        });
+        predicates.put(BY_PURCHASE_DATE_TIME, term -> {
+            LocalDateTime date = ServiceUtils.parseDateTime(term, ServiceUtils.dateWithTimeFormatter);
+
+            return bill -> bill.getPurchaseDateTime().compareTo(date) == 0;
+        });
+        predicates.put(BY_DEVICE_ID, term -> {
+            long id = ServiceUtils.parseNumber(term, Long::parseLong);
+
+            return bill -> bill.getItems().stream().anyMatch(item -> item.getDeviceId() == id);
+        });
+        predicates.put(BY_PRICE_FROM, term -> {
+            BigDecimal priceFrom = ServiceUtils.parseNumber(term, BigDecimal::new);
+
+            return bill -> bill.getItems().stream().anyMatch(item -> item.getPrice().compareTo(priceFrom) >= 0);
+        });
+        predicates.put(BY_PRICE_TO, term -> {
+            BigDecimal priceTo = ServiceUtils.parseNumber(term, BigDecimal::new);
+
+            return bill -> bill.getItems().stream().anyMatch(item -> item.getPrice().compareTo(priceTo) <= 0);
+        });
+        predicates.put(BY_PRICE, term -> {
+            BigDecimal price = ServiceUtils.parseNumber(term, BigDecimal::new);
+
+            return bill -> bill.getItems().stream().anyMatch(item -> item.getPrice().compareTo(price) == 0);
+        });
+        predicates.put(BY_QUANTITY_FROM, term -> {
+           long quantityFrom = ServiceUtils.parseNumber(term, Long::new);
+
+            return bill -> bill.getItems().stream().anyMatch(item -> item.getQuantity() >= quantityFrom);
+        });
+        predicates.put(BY_QUANTITY_TO, term -> {
+            long quantityTo = ServiceUtils.parseNumber(term, Long::new);
+
+            return bill -> bill.getItems().stream().anyMatch(item -> item.getQuantity() <= quantityTo);
+        });
+        predicates.put(BY_QUANTITY, term -> {
+            long quantity = ServiceUtils.parseNumber(term, Long::new);
+
+            return bill -> bill.getItems().stream().anyMatch(item -> item.getQuantity() == quantity);
         });
 
         comparators.put(BY_ID, Comparator.comparing(Bill::getId));

@@ -10,10 +10,8 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
-import java.awt.*;
 import java.util.List;
 import java.util.Set;
-import org.json.*;
 
 @Path("/device")
 public class DeviceController {
@@ -31,7 +29,7 @@ public class DeviceController {
     public Response getDevice(@PathParam("id") long id) {
         Device device = data.getItemById(id);
         if (device == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("No device with " + id + " id" ).build();
+            return Response.status(Response.Status.NOT_FOUND).entity("No device with id: " + id).build();
         }
         return Response.status(Response.Status.OK).entity(device).build();
     }
@@ -58,17 +56,23 @@ public class DeviceController {
         return Response.status(Response.Status.OK).entity(result).build();
     }
 
+    @PATCH
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response patchDevice(String jsonDeivce) throws RequestException {
+        if (data.getItemsList().isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND).entity("No devices in system").build();
+        }
+
+        Device device = data.patchDevice(jsonDeivce);
+
+        return Response.status(Response.Status.OK).entity(device).build();
+    }
+
     @POST
     @Path("color")
     @Consumes(MediaType.APPLICATION_JSON)
     public void createColor(String jsonStr) throws RequestException {
-        try {
-            JSONObject json = new JSONObject(jsonStr);
-            DeviceDataService.addColor(json.getString("name"),
-                    new Color(json.getInt("rgb")));
-        } catch (JSONException ex) {
-            throw new RequestException("Wrong json format");
-        }
+        DeviceDataService.addColor(jsonStr);
     }
 
     @GET
@@ -82,12 +86,7 @@ public class DeviceController {
     @Path("type")
     @Consumes(MediaType.APPLICATION_JSON)
     public void addType(String jsonStr) throws RequestException {
-        try {
-            JSONObject json = new JSONObject(jsonStr);
-            DeviceDataService.addType(json.getString("name"));
-        } catch (JSONException ex) {
-            throw new RequestException("Wrong json format");
-        }
+        DeviceDataService.addType(jsonStr);
     }
 
     @GET
@@ -97,7 +96,4 @@ public class DeviceController {
         return DeviceDataService.types;
     }
 
-    public DeviceDataService getData() {
-        return data;
-    }
 }

@@ -28,7 +28,7 @@ public class BillController {
     public Response getBill(@PathParam("id") long id) {
         Bill bill = data.getItemById(id);
         if (bill == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("No bill with " + id + " id" ).build();
+            return Response.status(Response.Status.NOT_FOUND).entity("No bill with id: " + id).build();
         }
         return Response.status(Response.Status.OK).entity(bill).build();
     }
@@ -54,4 +54,6 @@ public class BillController {
         }
         return Response.status(Response.Status.OK).entity(result).build();
     }
+
+
 }

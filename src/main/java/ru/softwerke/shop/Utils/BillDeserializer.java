@@ -23,17 +23,17 @@ public class BillDeserializer extends JsonDeserializer<Bill> {
 
         JsonNode clientIdNode = json.get(Bill.CLIENT_ID_FIELD);
         if (clientIdNode == null) {
-            throw new RequestException("Required field \"clientId\" missed");
+            throw new RequestException("Required field\"" + Bill.CLIENT_ID_FIELD + "\" missed");
         }
 
         JsonNode dateNode = json.get(Bill.PURCHASE_DATE_TIME_FIELD);
         if (dateNode == null) {
-            throw new RequestException("Required field \"date\" missed");
+            throw new RequestException("Required field \"" + Bill.PURCHASE_DATE_TIME_FIELD + "\" missed");
         }
 
         JsonNode jsonItemsNode = json.get(Bill.ITEMS_FIELD);
         if (jsonItemsNode == null) {
-            throw new RequestException("Required field \"items\" missed");
+            throw new RequestException("Required field \"" + Bill.ITEMS_FIELD + "\" missed");
         }
 
         List<BillItem> items = new CopyOnWriteArrayList<>();
@@ -41,12 +41,12 @@ public class BillDeserializer extends JsonDeserializer<Bill> {
         for (JsonNode jsonItem : jsonItemsNode) {
             JsonNode deviceIdNode = jsonItem.get(BillItem.DEVICE_ID_FIELD);
             if (deviceIdNode == null) {
-                throw new RequestException("Required field \"deviceId\" missed");
+                throw new RequestException("Required field \"" + BillItem.DEVICE_ID_FIELD + "\" missed");
             }
 
             JsonNode quantityNode = jsonItem.get(BillItem.QUANTITY_FIELD);
             if (quantityNode == null) {
-                throw new RequestException("Required field \"quantity\" missed");
+                throw new RequestException("Required field \"" + BillItem.QUANTITY_FIELD + "\" missed");
             }
 
             items.add(new BillItem(ServiceUtils.parseNumber(deviceIdNode.asText(), Long::parseLong),

@@ -6,10 +6,7 @@ import ru.softwerke.shop.controller.RequestException;
 import ru.softwerke.shop.model.Item;
 
 import javax.ws.rs.core.MultivaluedMap;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -61,7 +58,7 @@ public class DataService<T extends Item> {
         count = parseCount(queryParams);
         page = parsePage(queryParams);
 
-        List<Comparator<T>> sorts = getComparators(queryParams);
+        Comparator<T> sorts = getComparators(queryParams);
 
         Stream<T> stream = items.stream();
 
@@ -81,20 +78,25 @@ public class DataService<T extends Item> {
             stream = stream.filter(predicate.apply(entry.getValue().get(0)));
         }
 
-        for (Comparator<T> comparator : sorts) {
-            stream = stream.sorted(comparator);
-        }
-        return stream.skip(page * count).limit(count).collect(Collectors.toList());
+        return stream.sorted(sorts).skip(page * count).limit(count).collect(Collectors.toList());
     }
 
-    private List<Comparator<T>> getComparators(MultivaluedMap<String, String> queryParams) throws RequestException {
+    private Comparator<T> getComparators(MultivaluedMap<String, String> queryParams) throws RequestException {
         List<String> sorts = queryParams.get(ORDER_BY);
-        List<Comparator<T>> result = new ArrayList<>();
+        Comparator<T> result;
 
         if (sorts == null) {
-            result.add(comparators.get(BY_ID));
+            result = comparators.get(BY_ID);
             return result;
         }
+
+        result = comparators.get(sorts.get(0));
+
+        if (result == null) {
+            throw new RequestException("Illegal parameter value.\norderBy: " + sorts.get(0));
+        }
+
+        sorts.remove(0);
 
         for (String orderBy : sorts) {
             if (StringUtil.isNotBlank(orderBy)) {
@@ -109,7 +111,7 @@ public class DataService<T extends Item> {
                     throw new RequestException("Illegal parameter value.\norderBy: " + orderBy);
                 }
 
-                result.add(reversed ? comparator.reversed() : comparator);
+                result = result.thenComparing(reversed ? comparator.reversed() : comparator);
             }
         }
         return result;
