@@ -1,11 +1,10 @@
 package ru.softwerke.shop.service;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.eclipse.jetty.util.StringUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 import ru.softwerke.shop.controller.NotFoundException;
-import ru.softwerke.shop.utils.ServiceUtils;
+import ru.softwerke.shop.utils.Utils;
 import ru.softwerke.shop.controller.RequestException;
 import ru.softwerke.shop.model.Device;
 
@@ -21,16 +20,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DeviceDataService extends DataService<Device> {
-    private static final String BY_COMPANY = Device.COMPANY_FIELD;
-    private static final String BY_NAME = Device.NAME_FIELD;
-    private static final String BY_RELEASED = Device.RELEASED_FIELD;
-    private static final String BY_RELEASED_FROM = Device.RELEASED_FIELD + "From";
-    private static final String BY_RELEASED_TO = Device.RELEASED_FIELD + "To";
-    private static final String BY_COLOR= Device.COLOR_FIELD;
-    private static final String BY_TYPE = Device.TYPE_FIELD;
-    private static final String BY_PRICE = Device.PRICE_FIELD;
-    private static final String BY_PRICE_FROM = Device.PRICE_FIELD + "From";
-    private static final String BY_PRICE_TO = Device.PRICE_FIELD + "To";
+    public static final String BY_COMPANY = Device.COMPANY_FIELD;
+    public static final String BY_NAME = Device.NAME_FIELD;
+    public static final String BY_RELEASED = Device.RELEASED_FIELD;
+    public static final String BY_RELEASED_FROM = Device.RELEASED_FIELD + "From";
+    public static final String BY_RELEASED_TO = Device.RELEASED_FIELD + "To";
+    public static final String BY_COLOR= Device.COLOR_FIELD;
+    public static final String BY_TYPE = Device.TYPE_FIELD;
+    public static final String BY_PRICE = Device.PRICE_FIELD;
+    public static final String BY_PRICE_FROM = Device.PRICE_FIELD + "From";
+    public static final String BY_PRICE_TO = Device.PRICE_FIELD + "To";
 
     public static Map<String, Color> colors = new ConcurrentHashMap<>();
     public static CopyOnWriteArrayList<String> types = new CopyOnWriteArrayList<>();
@@ -65,32 +64,32 @@ public class DeviceDataService extends DataService<Device> {
         predicates.put(BY_COLOR, term -> device -> device.getColor().equals(term.toLowerCase()));
         predicates.put(BY_TYPE, term -> device -> device.getType().equals(term.toLowerCase()));
         predicates.put(BY_RELEASED_FROM, term ->  {
-            LocalDate date = ServiceUtils.parseDate(term, ServiceUtils.dateFormatter);
+            LocalDate date = Utils.parseDate(term);
 
             return device -> device.getReleased().compareTo(date) >= 0;
         });
         predicates.put(BY_RELEASED_TO, term -> {
-            LocalDate date = ServiceUtils.parseDate(term, ServiceUtils.dateFormatter);
+            LocalDate date = Utils.parseDate(term);
 
             return device -> device.getReleased().compareTo(date) <= 0;
         });
         predicates.put(BY_RELEASED, term -> {
-            LocalDate date = ServiceUtils.parseDate(term, ServiceUtils.dateFormatter);
+            LocalDate date = Utils.parseDate(term);
 
             return device -> device.getReleased().compareTo(date) == 0;
         });
         predicates.put(BY_PRICE_FROM, term ->  {
-            BigDecimal priceFrom = ServiceUtils.parseNumber(term, BigDecimal::new);
+            BigDecimal priceFrom = Utils.parseNumber(term, BigDecimal::new);
 
             return device -> device.getPrice().compareTo(priceFrom) >= 0;
         });
         predicates.put(BY_PRICE_TO, term ->  {
-            BigDecimal priceTo = ServiceUtils.parseNumber(term, BigDecimal::new);
+            BigDecimal priceTo = Utils.parseNumber(term, BigDecimal::new);
 
             return device -> device.getPrice().compareTo(priceTo) <= 0;
         });
         predicates.put(BY_PRICE, term ->  {
-            BigDecimal price = ServiceUtils.parseNumber(term, BigDecimal::new);
+            BigDecimal price = Utils.parseNumber(term, BigDecimal::new);
 
             return device -> device.getPrice().compareTo(price) == 0;
         });
@@ -123,7 +122,7 @@ public class DeviceDataService extends DataService<Device> {
             }
 
             if (keys.contains(Device.PRICE_FIELD)) {
-                BigDecimal price = ServiceUtils.parseNumber(json.get(Device.PRICE_FIELD).toString(), BigDecimal::new);
+                BigDecimal price = Utils.parseNumber(json.get(Device.PRICE_FIELD).toString(), BigDecimal::new);
 
                 if (price.compareTo(BigDecimal.valueOf(0)) <= 0) {
                     throw new RequestException("price can not be negative");

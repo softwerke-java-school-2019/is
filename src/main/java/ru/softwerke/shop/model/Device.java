@@ -46,8 +46,8 @@ public class Device extends Item {
         this.company = company;
         this.name = name;
         this.released = released;
-        this.color = color;
-        this.type = type;
+        this.color = color.toLowerCase();
+        this.type = type.toLowerCase();
         this.price = price;
     }
 

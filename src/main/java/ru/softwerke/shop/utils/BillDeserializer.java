@@ -44,11 +44,11 @@ public class BillDeserializer extends JsonDeserializer<Bill> {
                 throw new RequestException("Required field \"" + BillItem.QUANTITY_FIELD + "\" missed");
             }
 
-            items.add(new BillItem(ServiceUtils.parseNumber(deviceIdNode.asText(), Long::parseLong),
-                    ServiceUtils.parseNumber(quantityNode.asText(), Long::parseLong)));
+            items.add(new BillItem(Utils.parseNumber(deviceIdNode.asText(), Long::parseLong),
+                    Utils.parseNumber(quantityNode.asText(), Long::parseLong)));
         }
 
-        long clientId = ServiceUtils.parseNumber(clientIdNode.asText(), Long::parseLong);
+        long clientId = Utils.parseNumber(clientIdNode.asText(), Long::parseLong);
 
         return new Bill(clientId, LocalDateTime.now(), items);
     }

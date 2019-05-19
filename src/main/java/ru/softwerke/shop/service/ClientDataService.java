@@ -1,9 +1,8 @@
 package ru.softwerke.shop.service;
 
 import org.eclipse.jetty.util.StringUtil;
-import ru.softwerke.shop.controller.NotFoundException;
 import ru.softwerke.shop.controller.RequestException;
-import ru.softwerke.shop.utils.ServiceUtils;
+import ru.softwerke.shop.utils.Utils;
 import ru.softwerke.shop.model.Client;
 
 import java.io.IOException;
@@ -30,17 +29,17 @@ public class ClientDataService extends DataService<Client> {
         predicates.put(BY_SECOND_NAME, term -> client -> client.getSecondName().equals(term));
         predicates.put(BY_PATRONYMIC, term -> client -> client.getPatronymic().equals(term));
         predicates.put(BY_BIRTHDATE_FROM, term -> {
-            LocalDate date = ServiceUtils.parseDate(term, ServiceUtils.dateFormatter);
+            LocalDate date = Utils.parseDate(term);
 
             return client -> client.getBirthday().compareTo(date) >= 0;
         });
         predicates.put(BY_BIRTHDATE_TO, term -> {
-            LocalDate date = ServiceUtils.parseDate(term, ServiceUtils.dateFormatter);
+            LocalDate date = Utils.parseDate(term);
 
             return client -> client.getBirthday().compareTo(date) <= 0;
         });
         predicates.put(BY_BIRTHDATE, term -> {
-            LocalDate date = ServiceUtils.parseDate(term, ServiceUtils.dateFormatter);
+            LocalDate date = Utils.parseDate(term);
 
             return client -> client.getBirthday().compareTo(date) == 0;
         });

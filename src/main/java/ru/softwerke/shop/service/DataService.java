@@ -1,7 +1,8 @@
 package ru.softwerke.shop.service;
 
 import org.eclipse.jetty.util.StringUtil;
-import ru.softwerke.shop.utils.ServiceUtils;
+import ru.softwerke.shop.model.Client;
+import ru.softwerke.shop.utils.Utils;
 import ru.softwerke.shop.controller.RequestException;
 import ru.softwerke.shop.model.Item;
 
@@ -85,37 +86,45 @@ public abstract class DataService<T extends Item> {
         return stream.sorted(sorts).skip(page * count).limit(count).collect(Collectors.toList());
     }
 
+    /** Returns chain of comparators from queryParam
+     * Comparing parameters can be transferred as list or as one String splitting by symbol ','
+     *
+     * @param queryParams
+     * @return Comparator<Item>
+     * @throws RequestException
+     */
     private Comparator<T> getComparators(MultivaluedMap<String, String> queryParams) throws RequestException {
         List<String> sorts = queryParams.get(ORDER_BY);
-        Comparator<T> result;
+        Comparator<T> result = null;
 
         if (sorts == null) {
             result = comparators.get(BY_ID);
             return result;
         }
 
-        result = comparators.get(sorts.get(0));
+        for (String sort : sorts) {
+            String[] orders = sort.split(",");
+            for (String orderBy : orders) {
+                orderBy = orderBy.replaceAll("\\s", "");
 
-        if (result == null) {
-            throw new RequestException("Illegal parameter value.\norderBy: " + sorts.get(0));
-        }
+                if (StringUtil.isNotBlank(orderBy)) {
+                    boolean reversed = false;
+                    if (orderBy.charAt(0) == '-') {
+                        orderBy = orderBy.substring(1);
+                        reversed = true;
+                    }
 
-        sorts.remove(0);
+                    Comparator<T> comparator = comparators.get(orderBy);
+                    if (comparator == null) {
+                        throw new RequestException("Illegal parameter value.\norderBy: " + orderBy);
+                    }
 
-        for (String orderBy : sorts) {
-            if (StringUtil.isNotBlank(orderBy)) {
-                boolean reversed = false;
-                if (orderBy.charAt(0) == '-') {
-                    orderBy = orderBy.substring(1);
-                    reversed = true;
+                    if (result == null) {
+                        result = reversed ? comparator.reversed() : comparator;
+                    } else {
+                        result = result.thenComparing(reversed ? comparator.reversed() : comparator);
+                    }
                 }
-
-                Comparator<T> comparator = comparators.get(orderBy);
-                if (comparator == null) {
-                    throw new RequestException("Illegal parameter value.\norderBy: " + orderBy);
-                }
-
-                result = result.thenComparing(reversed ? comparator.reversed() : comparator);
             }
         }
         return result;
@@ -125,7 +134,7 @@ public abstract class DataService<T extends Item> {
         String countStr = queryParams.getFirst(COUNT);
 
         if (StringUtil.isNotBlank(countStr)) {
-            long count = ServiceUtils.parseNumber(countStr, Long::parseLong);
+            long count = Utils.parseNumber(countStr, Long::parseLong);
             if (count < 0) {
                 throw new RequestException("Positive number expected, instead: " + countStr);
             }
@@ -143,7 +152,7 @@ public abstract class DataService<T extends Item> {
         String pageStr = queryParams.getFirst(PAGE);
 
         if (StringUtil.isNotBlank(pageStr)) {
-            long page = ServiceUtils.parseNumber(pageStr, Long::parseLong) - 1;
+            long page = Utils.parseNumber(pageStr, Long::parseLong) - 1;
             if (page < 0) {
                 throw new RequestException("Positive number expected, instead: " + pageStr);
             }

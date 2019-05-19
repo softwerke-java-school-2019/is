@@ -1,6 +1,6 @@
 package ru.softwerke.shop.controller;
 
-import ru.softwerke.shop.utils.ServiceUtils;
+import ru.softwerke.shop.utils.Utils;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -27,8 +27,7 @@ public class NotFoundException extends IOException implements ExceptionMapper<No
 
     @Override
     public Response toResponse(NotFoundException e) {
-        StringWriter w = new StringWriter();
-        ServiceUtils.exceptionToJson(w, "Not Found", e.getMessage());
+        StringWriter w = Utils.exceptionToJson("Not Found", e.getMessage());
         return Response.status(Response.Status.NOT_FOUND).entity(w.toString()).type(MediaType.APPLICATION_JSON).build();
     }
 }

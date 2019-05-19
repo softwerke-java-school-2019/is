@@ -16,7 +16,7 @@ public class BillSerializer extends JsonSerializer<Bill> {
         jsonGenerator.writeNumberField(Bill.CLIENT_ID_FIELD, bill.getClientId());
         jsonGenerator.writeNumberField(Bill.TOTAL_PRICE_FIELD, bill.getTotalPrice());
         jsonGenerator.writeStringField(Bill.PURCHASE_DATE_TIME_FIELD, bill.getPurchaseDateTime()
-                .format(ServiceUtils.dateWithTimeFormatter));
+                .format(Utils.dateWithTimeFormatter));
         jsonGenerator.writeArrayFieldStart(Bill.ITEMS_FIELD);
         for (BillItem item : bill.getItems()) {
             jsonGenerator.writeStartObject();

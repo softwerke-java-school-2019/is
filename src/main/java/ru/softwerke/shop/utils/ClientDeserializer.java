@@ -34,7 +34,7 @@ public class ClientDeserializer extends JsonDeserializer<Client> {
         if (dateStr == null) {
             throw new RequestException("Required field \"" + Client.BIRTHDAY_FIELD + "\" missed");
         }
-        LocalDate date = ServiceUtils.parseDate(dateStr.asText(), ServiceUtils.dateFormatter);
+        LocalDate date = Utils.parseDate(dateStr.asText());
 
         return new Client(secondName.asText(), name.asText(), patronymic.asText(), date);
     }

@@ -15,7 +15,7 @@ public class ClientSerializer extends JsonSerializer<Client> {
         jsonGenerator.writeStringField(Client.NAME_FIELD, client.getName());
         jsonGenerator.writeStringField(Client.SECONDNAME_FIELD, client.getSecondName());
         jsonGenerator.writeStringField(Client.PATRONYMIC_FIELD, client.getPatronymic());
-        jsonGenerator.writeStringField(Client.BIRTHDAY_FIELD, client.getBirthday().format(ServiceUtils.dateFormatter));
+        jsonGenerator.writeStringField(Client.BIRTHDAY_FIELD, client.getBirthday().format(Utils.dateFormatter));
         jsonGenerator.writeEndObject();
     }
 }

@@ -19,7 +19,7 @@ public class DeviceSerializer extends JsonSerializer<Device> {
         jsonGenerator.writeStringField(Device.COLOR_FIELD, device.getColor());
         jsonGenerator.writeNumberField(Device.COLOR_RGB_FIELD, device.getColorRGB());
         jsonGenerator.writeNumberField(Device.PRICE_FIELD, device.getPrice());
-        jsonGenerator.writeStringField(Device.RELEASED_FIELD, device.getReleased().format(ServiceUtils.dateFormatter));
+        jsonGenerator.writeStringField(Device.RELEASED_FIELD, device.getReleased().format(Utils.dateFormatter));
         jsonGenerator.writeEndObject();
     }
 }

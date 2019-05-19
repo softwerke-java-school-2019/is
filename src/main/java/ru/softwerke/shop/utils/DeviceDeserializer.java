@@ -47,9 +47,9 @@ public class DeviceDeserializer extends JsonDeserializer<Device> {
         if (released == null) {
             throw new RequestException("Required field \"" + Device.RELEASED_FIELD + "\" missed");
         }
-        LocalDate date = ServiceUtils.parseDate(released.asText(), ServiceUtils.dateFormatter);
+        LocalDate date = Utils.parseDate(released.asText());
 
-        return new Device(company.asText(), name.asText(), color.asText().toLowerCase(), type.asText().toLowerCase(), date,
-                ServiceUtils.parseNumber(price.asText(), BigDecimal::new));
+        return new Device(company.asText(), name.asText(), color.asText(), type.asText(), date,
+                Utils.parseNumber(price.asText(), BigDecimal::new));
     }
 }

@@ -1,6 +1,6 @@
 package ru.softwerke.shop.controller;
 
-import ru.softwerke.shop.utils.ServiceUtils;
+import ru.softwerke.shop.utils.Utils;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -27,8 +27,7 @@ public class RequestException extends IOException implements ExceptionMapper<Req
 
     @Override
     public Response toResponse(RequestException e) {
-        StringWriter w = new StringWriter();
-        ServiceUtils.exceptionToJson(w, "Bad Request", e.getMessage());
+        StringWriter w = Utils.exceptionToJson("Bad Request", e.getMessage());
         return Response.status(Response.Status.BAD_REQUEST).entity(w.toString()).type(MediaType.APPLICATION_JSON).build();
     }
 }
