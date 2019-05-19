@@ -1,12 +1,13 @@
 package ru.softwerke.shop.controller;
 
-import org.json.JSONException;
+import ru.softwerke.shop.utils.ServiceUtils;
 
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
+import java.io.StringWriter;
 
 @Provider
 public class RequestException extends IOException implements ExceptionMapper<RequestException> {
@@ -26,6 +27,8 @@ public class RequestException extends IOException implements ExceptionMapper<Req
 
     @Override
     public Response toResponse(RequestException e) {
-        return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();
+        StringWriter w = new StringWriter();
+        ServiceUtils.exceptionToJson(w, "Bad Request", e.getMessage());
+        return Response.status(Response.Status.BAD_REQUEST).entity(w.toString()).type(MediaType.APPLICATION_JSON).build();
     }
 }

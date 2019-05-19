@@ -1,7 +1,12 @@
 package ru.softwerke.shop.service;
 
+import org.eclipse.jetty.util.StringUtil;
+import ru.softwerke.shop.controller.NotFoundException;
+import ru.softwerke.shop.controller.RequestException;
 import ru.softwerke.shop.utils.ServiceUtils;
 import ru.softwerke.shop.model.Client;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
@@ -47,4 +52,18 @@ public class ClientDataService extends DataService<Client> {
         comparators.put(BY_BIRTHDATE, Comparator.comparing(Client::getBirthday));
     }
 
+    @Override
+    public void checkItem(Client item) throws IOException {
+        if (StringUtil.isBlank(item.getName())) {
+            throw new RequestException("name field is incorrect");
+        }
+
+        if (StringUtil.isBlank(item.getSecondName())) {
+            throw new RequestException("secondName field is incorrect");
+        }
+
+        if (StringUtil.isBlank(item.getPatronymic())) {
+            throw new RequestException("patronymic field is incorrect");
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package ru.softwerke.shop.controller;
 
 import ru.softwerke.shop.model.Device;
-import ru.softwerke.shop.utils.ModelUtils;
 import ru.softwerke.shop.service.DeviceDataService;
 
 import javax.inject.Inject;
@@ -10,6 +9,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -26,10 +26,14 @@ public class DeviceController {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getDevice(@PathParam("id") long id) {
+    public Response getDevice(@PathParam("id") long id) throws IOException {
+        if (data.getItemsList().isEmpty()) {
+            throw new NotFoundException("No devices in system");
+        }
+
         Device device = data.getItemById(id);
         if (device == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("No device with id: " + id).build();
+            throw new NotFoundException("No client with id: " + id);
         }
         return Response.status(Response.Status.OK).entity(device).build();
     }
@@ -37,33 +41,32 @@ public class DeviceController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Device createDevice(Device device) throws RequestException {
-        ModelUtils.checkDevice(device);
+    public Device createDevice(Device device) throws IOException {
         return data.addItem(device);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response filter (@Context UriInfo ui) throws RequestException {
+    public Response filter (@Context UriInfo ui) throws IOException {
         if (data.getItemsList().isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).entity("No devices in system").build();
+            throw new NotFoundException("No devices in system");
         }
 
         List<Device> result = data.getList(ui.getQueryParameters());
         if (result.isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).entity("No devices matching filters").build();
+            throw new NotFoundException("No devices matching filters");
         }
         return Response.status(Response.Status.OK).entity(result).build();
     }
 
     @PATCH
     @Produces(MediaType.APPLICATION_JSON)
-    public Response patchDevice(String jsonDeivce) throws RequestException {
+    public Response patchDevice(String jsonDevice) throws IOException {
         if (data.getItemsList().isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).entity("No devices in system").build();
+            throw new NotFoundException("No devices in system");
         }
 
-        Device device = data.patchDevice(jsonDeivce);
+        Device device = data.patchDevice(jsonDevice);
 
         return Response.status(Response.Status.OK).entity(device).build();
     }

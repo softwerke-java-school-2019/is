@@ -11,6 +11,7 @@ import ru.softwerke.shop.model.Bill;
 import ru.softwerke.shop.model.BillItem;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -23,11 +24,6 @@ public class BillDeserializer extends JsonDeserializer<Bill> {
         JsonNode clientIdNode = json.get(Bill.CLIENT_ID_FIELD);
         if (clientIdNode == null) {
             throw new RequestException("Required field\"" + Bill.CLIENT_ID_FIELD + "\" missed");
-        }
-
-        JsonNode dateNode = json.get(Bill.PURCHASE_DATE_TIME_FIELD);
-        if (dateNode == null) {
-            throw new RequestException("Required field \"" + Bill.PURCHASE_DATE_TIME_FIELD + "\" missed");
         }
 
         JsonNode jsonItemsNode = json.get(Bill.ITEMS_FIELD);
@@ -54,6 +50,6 @@ public class BillDeserializer extends JsonDeserializer<Bill> {
 
         long clientId = ServiceUtils.parseNumber(clientIdNode.asText(), Long::parseLong);
 
-        return new Bill(clientId, ServiceUtils.parseDateTime(dateNode.asText(), ServiceUtils.dateWithTimeFormatter), items);
+        return new Bill(clientId, LocalDateTime.now(), items);
     }
 }

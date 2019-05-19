@@ -1,7 +1,6 @@
 package ru.softwerke.shop.controller;
 
 import ru.softwerke.shop.model.Client;
-import ru.softwerke.shop.utils.ModelUtils;
 import ru.softwerke.shop.service.ClientDataService;
 
 import javax.inject.Inject;
@@ -10,6 +9,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import java.io.IOException;
 import java.util.List;
 
 @Path("/customer")
@@ -24,10 +24,14 @@ public class ClientController {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getClient(@PathParam("id") long id) {
+    public Response getClient(@PathParam("id") long id) throws IOException {
+        if (data.getItemsList().isEmpty()) {
+            throw new NotFoundException("No clients in system");
+        }
+
         Client client = data.getItemById(id);
         if (client == null) {
-            return Response.status(Response.Status.NOT_FOUND).entity("No client with id: " + id ).build();
+            throw new NotFoundException("No client with id: " + id);
         }
         return Response.status(Response.Status.OK).entity(client).build();
     }
@@ -35,21 +39,20 @@ public class ClientController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Client createClient(Client client) throws RequestException {
-        ModelUtils.checkClient(client);
+    public Client createClient(Client client) throws IOException {
         return data.addItem(client);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response filter (@Context UriInfo ui) throws RequestException {
+    public Response filter (@Context UriInfo ui) throws IOException {
         if (data.getItemsList().isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).entity("No clients in system").build();
+            throw new NotFoundException("No clients in system");
         }
 
         List<Client> result = data.getList(ui.getQueryParameters());
         if (result.isEmpty()) {
-            return Response.status(Response.Status.NOT_FOUND).entity("No clients matching filters").build();
+            throw new NotFoundException("No clients matching filters");
         }
         return Response.status(Response.Status.OK).entity(result).build();
     }

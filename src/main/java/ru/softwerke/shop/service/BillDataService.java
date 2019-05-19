@@ -1,9 +1,13 @@
 package ru.softwerke.shop.service;
 
+import ru.softwerke.shop.controller.NotFoundException;
+import ru.softwerke.shop.controller.RequestException;
+import ru.softwerke.shop.model.Device;
 import ru.softwerke.shop.utils.ServiceUtils;
 import ru.softwerke.shop.model.Bill;
 import ru.softwerke.shop.model.BillItem;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -117,11 +121,25 @@ public class BillDataService extends DataService<Bill> {
         comparators.put(BY_TOTAL_PRICE, Comparator.comparing(Bill::getTotalPrice));
     }
 
-    public ClientDataService getClientData() {
-        return clientData;
-    }
+    @Override
+    public void checkItem(Bill item) throws IOException {
+        if (clientData.getItemById(item.getClientId()) == null) {
+            throw new NotFoundException("No client with id: " + item.getClientId());
+        }
 
-    public DeviceDataService getDeviceData() {
-        return deviceData;
+        for (BillItem billItem : item.getItems()) {
+            Device device = deviceData.getItemById(billItem.getDeviceId());
+            if (device == null) {
+                throw new NotFoundException("No device with id: " + billItem.getDeviceId());
+            }
+
+            if (billItem.getQuantity() < 1) {
+                throw new RequestException("Wrong quantity: " + billItem.getQuantity());
+            }
+
+            billItem.setPrice(device.getPrice());
+        }
+
+        item.setTotalPrice();
     }
 }

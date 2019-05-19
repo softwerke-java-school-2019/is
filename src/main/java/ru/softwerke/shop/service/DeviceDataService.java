@@ -1,12 +1,16 @@
 package ru.softwerke.shop.service;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+import org.eclipse.jetty.util.StringUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
+import ru.softwerke.shop.controller.NotFoundException;
 import ru.softwerke.shop.utils.ServiceUtils;
 import ru.softwerke.shop.controller.RequestException;
 import ru.softwerke.shop.model.Device;
 
 import java.awt.*;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -100,7 +104,7 @@ public class DeviceDataService extends DataService<Device> {
         comparators.put(BY_TYPE, Comparator.comparing(Device::getType));
     }
 
-    public Device patchDevice(String jsonDevice) throws RequestException {
+    public Device patchDevice(String jsonDevice) throws IOException {
         try {
             JSONObject json = new JSONObject(jsonDevice);
 
@@ -115,7 +119,7 @@ public class DeviceDataService extends DataService<Device> {
             Device device = getItemById(id);
 
             if (device == null) {
-                throw new RequestException("No device with id: " + id);
+                throw new NotFoundException("No device with id: " + id);
             }
 
             if (keys.contains(Device.PRICE_FIELD)) {
@@ -133,7 +137,7 @@ public class DeviceDataService extends DataService<Device> {
                 String color = json.getString(Device.COLOR_FIELD);
 
                 if (!DeviceDataService.colors.containsKey(color.toLowerCase())) {
-                    throw new RequestException("Illegal color: " + color );
+                    throw new NotFoundException("Illegal color: " + color );
                 }
 
                 device.setColor(color);
@@ -144,7 +148,7 @@ public class DeviceDataService extends DataService<Device> {
                 String type = json.getString(Device.TYPE_FIELD);
 
                 if (!DeviceDataService.types.contains(type.toLowerCase())) {
-                    throw new RequestException("Illegal type: " + type );
+                    throw new NotFoundException("Illegal type: " + type );
                 }
 
                 device.setType(type);
@@ -197,6 +201,38 @@ public class DeviceDataService extends DataService<Device> {
             types.add(type.toLowerCase());
         } catch (JSONException ex) {
             throw new RequestException("Wrong json format");
+        }
+    }
+
+    @Override
+    public void checkItem(Device item) throws IOException {
+
+        if (StringUtil.isBlank(item.getCompany())) {
+            throw new RequestException("company field is incorrect");
+        }
+
+        if (StringUtil.isBlank(item.getName())) {
+            throw new RequestException("name field is incorrect");
+        }
+
+        if (StringUtil.isBlank(item.getType())) {
+            throw new RequestException("type field is incorrect");
+        }
+
+        if (StringUtil.isBlank(item.getColor())) {
+            throw new RequestException("color field is incorrect");
+        }
+
+        if (!DeviceDataService.colors.containsKey(item.getColor())) {
+            throw new NotFoundException("Illegal color: " + item.getColor() );
+        }
+
+        if (!DeviceDataService.types.contains(item.getType())) {
+            throw new NotFoundException("Illegal type: " + item.getType() );
+        }
+
+        if (item.getPrice().compareTo(BigDecimal.valueOf(0)) <= 0) {
+            throw new RequestException("price can not be negative");
         }
     }
 }

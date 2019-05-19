@@ -6,20 +6,20 @@ import ru.softwerke.shop.model.Client;
 
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 public class ClientDataServiceTest {
-    ClientDataService data = new ClientDataService();
-    List<Client> clientsList = new ArrayList<>();
+    private ClientDataService data = new ClientDataService();
+    private List<Client> clientsList = new ArrayList<>();
 
     @Before
-    public void init() {
+    public void init() throws IOException {
         clientsList.add(new Client("Саяхов", "Ильфат", "Раилевич", LocalDate.of(1998, 4, 6)));
         clientsList.add(new Client("Башаров", "Ильфат", "Раилевич", LocalDate.of(1999, 1, 1)));
         clientsList.add(new Client("Цвык", "Илья", "Игоревич", LocalDate.of(1995, 7, 5)));

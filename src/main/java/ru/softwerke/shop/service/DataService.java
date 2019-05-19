@@ -6,6 +6,7 @@ import ru.softwerke.shop.controller.RequestException;
 import ru.softwerke.shop.model.Item;
 
 import javax.ws.rs.core.MultivaluedMap;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Predicate;
@@ -15,7 +16,7 @@ import java.util.stream.Stream;
 /**
  * Data service for items
  */
-public class DataService<T extends Item> {
+public abstract class DataService<T extends Item> {
     public static final String PAGE = "page";
     public static final String COUNT = "count";
     public static final String ORDER_BY = "orderBy";
@@ -32,10 +33,13 @@ public class DataService<T extends Item> {
     Map<String, CheckedFunction<String, Predicate<T>>> predicates;
     Map<String, Comparator<T>> comparators;
 
-    public T addItem(T item) {
+    public T addItem(T item) throws IOException {
+        checkItem(item);
         items.add(item);
         return item;
     }
+
+    public abstract void checkItem(T item)throws IOException;
 
     public T getItemById(long id) {
         return items.stream().filter(item -> item.getId() == id).findFirst().orElse(null);
