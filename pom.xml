@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.softwerke</groupId>
-    <artifactId>shop</artifactId>
+    <artifactId>java-2019-sayahov</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>shop</name>
+    <name>java-2019-sayahov</name>
 
     <properties>
         <java.version>1.8</java.version>
