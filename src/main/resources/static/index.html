@@ -1,3 +1,115 @@
+<!DOCTYPE html>
 <html lang="en">
-Hello something
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Shop</title>
+</head>
+
+<body>
+<div class="row">
+    <div class="col s6">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Фильтры</span>
+
+                <div class="input-field">
+                    <input id="deviceId" type="number" class="validate" min="0">
+                    <label for="deviceId">ID девайса</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="manufacturer" type="text" class="validate">
+                    <label for="manufacturer">Производитель</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="modelName" type="text" class="validate">
+                    <label for="modelName">Модель</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="price" type="number" class="validate" min="0">
+                    <label for="price">Цена</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="priceFrom" type="number" class="validate" min="0">
+                    <label for="priceFrom">Цена от</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="priceTo" type="number" class="validate" min="0">
+                    <label for="priceTo">Цена до</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="manufactureDate" type="text" class="validate" min="0">
+                    <label for="manufactureDate">Дата дд.мм.гггг</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="manufactureDateFrom" type="text" class="validate" min="0">
+                    <label for="manufactureDateFrom">Дата от дд.мм.гггг</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="manufactureDateTo" type="text" class="validate" min="0">
+                    <label for="manufactureDateTo">Дата до дд.мм.гггг</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="deviceType" type="text" class="validate">
+                    <label for="deviceType">Тип</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="colorName" type="text" class="validate">
+                    <label for="colorName">Цвет</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col s6">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Отображение и сортировка</span>
+
+                <div class="input-field">
+                    <input id="page" type="number" class="validate" min="1">
+                    <label for="page">Страница</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="count" type="number" class="validate" min="1">
+                    <label for="count">Количество</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="sortBy" type="text" class="validate">
+                    <label for="sortBy">Параметры сортировки</label>
+                </div>
+            </div>
+        </div>
+
+        <a class="waves-effect waves-light btn-large" onclick="get()">Поиск</a>
+    </div>
+    </div>
+</div>
+
+<div id="container">
+</div>
+
+<script src="script.js"></script>
+
+</body>
 </html>

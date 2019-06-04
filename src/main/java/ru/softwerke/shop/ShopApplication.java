@@ -9,6 +9,7 @@ import ru.softwerke.shop.service.DataService;
 import ru.softwerke.shop.service.DeviceDataService;
 
 import javax.ws.rs.ApplicationPath;
+import java.util.LinkedHashMap;
 
 @ApplicationPath("/")
 public class ShopApplication extends ResourceConfig {
@@ -40,6 +41,10 @@ public class ShopApplication extends ResourceConfig {
                 bind(billService(billData)).to(BillDataService.class);
             }
         });
+
+        setProperties(new LinkedHashMap<String, Object>() {{
+            put(org.glassfish.jersey.server.ServerProperties.PROCESSING_RESPONSE_ERRORS_ENABLED, true);
+        }});
     }
 
     private ClientDataService clientService(ClientDataService clientData){
