@@ -127,6 +127,10 @@ public abstract class DataService<T extends Item> {
                 }
             }
         }
+
+        if (result == null) {
+            result = comparators.get(BY_ID);
+        }
         return result;
     }
 

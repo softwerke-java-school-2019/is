@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ru.softwerke.shop.utils.DeviceDeserializer;
 import ru.softwerke.shop.utils.DeviceSerializer;
 import ru.softwerke.shop.service.DeviceDataService;
+import ru.softwerke.shop.utils.Utils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -20,7 +21,7 @@ public class Device extends Item {
     public static final String NAME_FIELD = "modelName";
     public static final String RELEASED_FIELD = "manufactureDate";
     public static final String COLOR_FIELD = "colorName";
-    public static final String COLOR_RGB_FIELD = "colorRGB";
+    public static final String COLOR_HEX_FIELD = "colorHex";
     public static final String TYPE_FIELD = "deviceType";
     public static final String PRICE_FIELD = "price";
 
@@ -79,8 +80,8 @@ public class Device extends Item {
         return price;
     }
 
-    public int getColorRGB() {
-        return DeviceDataService.colors.get(color).getRGB();
+    public String getColorHex() {
+        return Utils.toHexString(DeviceDataService.colors.get(color));
     }
 
     public void setColor(String color) {

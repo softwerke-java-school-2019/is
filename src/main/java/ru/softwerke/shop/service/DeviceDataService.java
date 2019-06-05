@@ -35,13 +35,6 @@ public class DeviceDataService extends DataService<Device> {
     public static CopyOnWriteArrayList<String> types = new CopyOnWriteArrayList<>();
 
     static {
-        colors.put("red", Color.RED);
-        colors.put("green", Color.GREEN);
-        colors.put("blue", Color.BLUE);
-        colors.put("yellow", Color.YELLOW);
-        colors.put("black", Color.BLACK);
-        colors.put("white", Color.WHITE);
-        colors.put("gray", Color.GRAY);
         colors.put("красный", Color.RED);
         colors.put("зеленый", Color.GREEN);
         colors.put("синий", Color.BLUE);
@@ -59,39 +52,44 @@ public class DeviceDataService extends DataService<Device> {
         comparators = new ConcurrentHashMap<>();
         items = new CopyOnWriteArrayList<>();
 
-        predicates.put(BY_NAME, term -> device -> device.getName().equals(term));
-        predicates.put(BY_COMPANY, term -> device -> device.getCompany().equals(term));
-        predicates.put(BY_COLOR, term -> device -> device.getColor().equals(term.toLowerCase()));
-        predicates.put(BY_TYPE, term -> device -> device.getType().equals(term.toLowerCase()));
+        predicates.put(BY_ID, term -> {
+            Long id = Utils.parseNumber(term, Long::parseLong);
+
+            return device -> term.equals("") || device.getId() == id;
+        });
+        predicates.put(BY_NAME, term -> device -> term.equals("") || device.getName().equals(term));
+        predicates.put(BY_COMPANY, term -> device -> term.equals("") || device.getCompany().equals(term));
+        predicates.put(BY_COLOR, term -> device -> term.equals("") || device.getColor().equals(term.toLowerCase()));
+        predicates.put(BY_TYPE, term -> device -> term.equals("") || device.getType().equals(term.toLowerCase()));
         predicates.put(BY_RELEASED_FROM, term ->  {
             LocalDate date = Utils.parseDate(term);
 
-            return device -> device.getReleased().compareTo(date) >= 0;
+            return device -> term.equals("") || device.getReleased().compareTo(date) >= 0;
         });
         predicates.put(BY_RELEASED_TO, term -> {
             LocalDate date = Utils.parseDate(term);
 
-            return device -> device.getReleased().compareTo(date) <= 0;
+            return device -> term.equals("") || device.getReleased().compareTo(date) <= 0;
         });
         predicates.put(BY_RELEASED, term -> {
             LocalDate date = Utils.parseDate(term);
 
-            return device -> device.getReleased().compareTo(date) == 0;
+            return device -> term.equals("") || device.getReleased().compareTo(date) == 0;
         });
         predicates.put(BY_PRICE_FROM, term ->  {
             BigDecimal priceFrom = Utils.parseNumber(term, BigDecimal::new);
 
-            return device -> device.getPrice().compareTo(priceFrom) >= 0;
+            return device -> term.equals("") || device.getPrice().compareTo(priceFrom) >= 0;
         });
         predicates.put(BY_PRICE_TO, term ->  {
             BigDecimal priceTo = Utils.parseNumber(term, BigDecimal::new);
 
-            return device -> device.getPrice().compareTo(priceTo) <= 0;
+            return device -> term.equals("") || device.getPrice().compareTo(priceTo) <= 0;
         });
         predicates.put(BY_PRICE, term ->  {
             BigDecimal price = Utils.parseNumber(term, BigDecimal::new);
 
-            return device -> device.getPrice().compareTo(price) == 0;
+            return device -> term.equals("") || device.getPrice().compareTo(price) == 0;
         });
 
         comparators.put(BY_ID, Comparator.comparing(Device::getId));

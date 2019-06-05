@@ -1,80 +1,147 @@
+$(document).ready(function() {
+    $('select').formSelect();
+});
+
 const api = axios.create({
     baseURL: 'http://localhost:8080/api/device',
     timeout: 5000
 });
 
+let selectorType = document.getElementById("deviceType");
+
+api.get("/type", {}).then(response => {
+    for (let i in response.data) {
+        let temp = document.getElementById("option").content.cloneNode(true);
+        let option = temp.querySelector("option");
+        option.value = response.data[i];
+        option.textContent = response.data[i];
+        selectorType.appendChild(option);
+    }
+
+}).catch(error => {
+    alert("Error")
+});
+
+let selectorColor = document.getElementById("colorName");
+
+api.get("/color", {}).then(response => {
+    for (let i in response.data) {
+        let temp = document.getElementById("option").content.cloneNode(true);
+        let option = temp.querySelector("option");
+        option.value = response.data[i];
+        option.textContent = response.data[i];
+        selectorColor.appendChild(option);
+    }
+
+}).catch(error => {
+    alert("Error")
+});
+
+let sorting = "";
+
 function get() {
-    let param = getParam();
-    api.get("?" + param , {}).then(response => {
-        let output = "";
-        for (let i in response.data) {
-            output += "<div class='card'>";
-            output += "<div class='card-tabs'>";
-            output += "<ul class='tabs tabs-fixed-width'>";
-            output += "<li class = 'tab'>" + response.data[i].manufacturer + "</li>";
-            output += "<li class = 'tab'>" + response.data[i].modelName + "</li>";
-            output += "<li class = 'tab'>" + response.data[i].price + "</li>";
-            output += "<li class = 'tab'>" + response.data[i].manufactureDate + "</li>";
-            output += "<li class = 'tab'>" + response.data[i].deviceType + "</li>";
-            output += "<li class = 'tab'>" + response.data[i].colorName + "</li>";
-            output += "</ul>";
-            output += "</div>";
-            output += "</div>";
+    let container = document.getElementById("container");
+    container.innerHTML = "";
+
+
+    api.get("", {
+        params: {
+            id: document.getElementById("deviceId").value,
+            manufacturer: document.getElementById("manufacturer").value,
+            modelName: document.getElementById("modelName").value,
+            price: document.getElementById("price").value,
+            priceFrom: document.getElementById("priceFrom").value,
+            priceTo: document.getElementById("priceFrom").value,
+            manufactureDate: formatDate(document.getElementById("manufactureDate").value),
+            manufactureDateFrom: formatDate(document.getElementById("manufactureDateFrom").value),
+            manufactureDateTo: formatDate(document.getElementById("manufactureDateTo").value),
+            deviceType: document.getElementById("deviceType").value,
+            colorName: document.getElementById("colorName").value,
+            page: document.getElementById("page").value,
+            count: document.getElementById("count").value,
+            orderBy: sorting
+
+
         }
-        document.getElementById("container").innerHTML = output;
+    }).then(response => {
+
+        for (let i in response.data) {
+            let responseContainer = document.getElementById("response").content.cloneNode(true);
+            let tab = responseContainer.querySelectorAll('li');
+            tab[0].textContent = response.data[i].manufacturer;
+            tab[1].textContent = response.data[i].modelName;
+            tab[2].textContent = response.data[i].price;
+            tab[3].textContent = response.data[i].manufactureDate;
+            tab[4].textContent = response.data[i].deviceType;
+            tab[5].style = "background: " + response.data[i].colorHex;
+            container.appendChild(responseContainer);
+        }
     }).catch(error => {
         alert(error.response.data.message)
     });
 }
 
-function getParam() {
-    let param = "";
-    let manufacturer = document.getElementById("manufacturer").value;
-    if (manufacturer != '')
-        param += 'manufacturer=' + manufacturer + '&';
-    let deviceId = document.getElementById("deviceId").value;
-    if (deviceId != '')
-        param += 'deviceId=' + deviceId + '&';
-    let modelName = document.getElementById("modelName").value;
-    if (modelName != '')
-        param += 'modelName=' + deviceId + '&';
-    let price = document.getElementById("price").value;
-    if (price != '')
-        param += 'price=' + price + '&';
-    let priceFrom = document.getElementById("priceFrom").value;
-    if (priceFrom != '')
-        param += 'priceFrom=' + priceFrom + '&';
-    let priceTo = document.getElementById("priceTo").value;
-    if (priceTo != '')
-        param += 'priceTo=' + priceTo + '&';
-    let manufactureDate = document.getElementById("manufactureDate").value;
-    if (manufactureDate != '')
-        param += 'manufactureDate=' + manufactureDate + '&';
-    let manufactureDateFrom = document.getElementById("manufactureDateFrom").value;
-    if (manufactureDateFrom != '')
-        param += 'manufactureDateFrom=' + manufactureDateFrom + '&';
-    let manufactureDateTo = document.getElementById("manufactureDateTo").value;
-    if (manufactureDateTo != '')
-        param += 'manufactureDateTo=' + manufactureDateTo + '&';
-    let deviceType = document.getElementById("deviceType").value;
-    if (deviceType != '')
-        param += 'deviceType=' + deviceType + '&';
-    let colorName = document.getElementById("colorName").value;
-    if (colorName != '')
-        param += 'colorName=' + colorName + '&';
-    let page = document.getElementById("page").value;
-    if (page != '')
-        param += 'page=' + page + '&';
-    let count = document.getElementById("count").value;
-    if (count != '')
-        param += 'count=' + count + '&';
-    let sortBy = document.getElementById("sortBy").value;
-    if (sortBy != '')
-        param += 'orderBy=' + sortBy + '&';
-
-    if (param != '') {
-        param.substr(0, param.length - 1)
+function formatDate(dateStr) {
+    if (dateStr === '') {
+        return ''
     }
 
-    return param;
+    let date = new Date(dateStr);
+
+    let dd = date.getDate();
+    if (dd < 10) dd = '0' + dd;
+
+    let mm = date.getMonth() + 1;
+    if (mm < 10) mm = '0' + mm;
+
+    let yy = date.getFullYear();
+
+    return dd + '.' + mm + '.' + yy;
+}
+
+function addSorting() {
+    let val = $('#sortBy').val();
+    let params = sorting.split(",");
+
+    if (val === "" || params.indexOf(val) !== -1 ) {
+        return
+    }
+
+    let check = $('#order').is(":checked");
+    let text = $('#sortBy option:selected').text();
+    if (check) {
+        val = "-" + val;
+        text += ": по убыванию"
+    }
+    else {
+        text += ": по возростанию"
+    }
+
+    let card = document.getElementById("card");
+    card.style.display = "inline";
+    sorting += val + ",";
+    let container = document.getElementById("containerSort");
+    let template = document.getElementById("addSort").content.cloneNode(true);
+    let tab = template.querySelector('p');
+    tab.textContent = text;
+    tab.id = val + "sort";
+    container.appendChild(template);
+}
+
+function removeSorting() {
+    let params = sorting.split(",");
+    let param = params[params.length - 2];
+    sorting = sorting.replace(param + ",", "");
+
+    let elem = document.getElementById(param + "sort");
+    elem.remove();
+
+    if (sorting === "") {
+        document.getElementById("card").style.display = "none";
+    }
+}
+
+function clearSortings() {
+    sorting = "";
+    document.getElementById("containerSort").innerHTML = "";
 }
