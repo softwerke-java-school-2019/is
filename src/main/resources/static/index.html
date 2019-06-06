@@ -1,172 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-
 <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <meta charset="UTF-8">
     <title>Shop</title>
 </head>
-
 <body>
-
-<div class="row">
-    <div class="col s3">
-        <div class="card">
-            <div class="card-content">
-                <span class="card-title">Фильтры</span>
-
-                <div class="input-field">
-                    <input id="deviceId" type="number" class="validate" min="0">
-                    <label for="deviceId">ID девайса</label>
-                </div>
-
-                <div class="input-field">
-                    <input id="manufacturer" type="text" class="validate">
-                    <label for="manufacturer">Производитель</label>
-                </div>
-
-                <div class="input-field">
-                    <input id="modelName" type="text" class="validate">
-                    <label for="modelName">Модель</label>
-                </div>
-
-                <div class="input-field">
-                    <input id="price" type="number" class="validate" min="0">
-                    <label for="price">Цена</label>
-                </div>
-
-                <div class="input-field">
-                    <input id="priceFrom" type="number" class="validate" min="0">
-                    <label for="priceFrom">Цена от</label>
-                </div>
-
-                <div class="input-field">
-                    <input id="priceTo" type="number" class="validate" min="0">
-                    <label for="priceTo">Цена до</label>
-                </div>
-
-                <div class="input-field">
-                    <input id="manufactureDate" type="date" class="validate">
-                    <label for="manufactureDate">Дата</label>
-                </div>
-
-                <div class="input-field">
-                    <input id="manufactureDateFrom" type="date" class="validate">
-                    <label for="manufactureDateFrom">Дата от</label>
-                </div>
-
-                <div class="input-field">
-                    <input id="manufactureDateTo" type="date" class="validate">
-                    <label for="manufactureDateTo">Дата до</label>
-                </div>
-
-                <div class="input-field">
-                    <select id="deviceType">
-                        <option value="" >Выберите тип девайса</option>
-                    </select>
-                    <label>Тип</label>
-                </div>
-
-                <div class="input-field">
-                    <select id="colorName">
-                        <option value = "">Выберите цвет</option>
-                    </select>
-                    <label >Цвет</label>
-                </div>
-            </div>
-        </div>
+<nav class="teal darken-1" >
+    <div class="nav-wrapper">
+        <ul class="right hide-on-med-and-down">
+            <li><a href="Device/html/getDevice.html">Device</a></li>
+            <li><a href="Customer/html/getCustomer.html">Customer</a></li>
+            <li><a href="">Bill</a></li>
+        </ul>
     </div>
-
-    <div class="col s6" id="container">
-    </div>
-
-    <div class="col s3">
-        <div class="card">
-            <div class="card-content">
-                <span class="card-title">Отображение и сортировка</span>
-
-                <div class="input-field">
-                    <input id="page" type="number" class="validate" min="1">
-                    <label for="page">Страница</label>
-                </div>
-
-                <div class="input-field">
-                    <input id="count" type="number" class="validate" min="1">
-                    <label for="count">Количество</label>
-                </div>
-
-                <div class="input-field">
-                    <select id="sortBy">
-                        <option value="">Выберете параметр сортировки</option>
-                        <option value="manufactureDate" >По дате производства</option>
-                        <option value="price" >По цене</option>
-                        <option value="manufacturer">По производителю</option>
-                        <option value="modelName">По модели</option>
-                        <option value="deviceType">По типу</option>
-                        <option value="colorName">По цвету</option>
-                    </select>
-                    <label for="sortBy">Параметры сортировки</label>
-                </div>
-
-                <div class="switch" style="margin-bottom: 5%; margin-top: 5%">
-                    <label>
-                        По возростанию
-                        <input type="checkbox" id="order">
-                        <span class="lever"></span>
-                        По убыванию
-                    </label>
-                </div>
-
-
-                <div class='card' id="card" style="display: none">
-                    <div class='card-content' id="containerSort">
-                    </div>
-                </div>
-
-                <div class="row">
-                    <a class="waves-effect waves-light btn col s4" onclick="addSorting()">Добавить</a>
-                    <a class="waves-effect waves-light btn col s4" onclick="removeSorting()">Удалить</a>
-                    <a class="waves-effect waves-light btn col s4" onclick="clearSortings()">Очистить</a>
-                </div>
-            </div>
-        </div>
-
-        <a class="waves-effect waves-light btn-large col s12" onclick="get()">Поиск</a>
-    </div>
-
-</div>
-
-<template id="response" >
-    <div class='card'>
-        <div class='card-tabs'>
-            <ul class='tabs tabs-fixed-width'>
-                <li class = 'tab'></li>
-                <li class = 'tab'></li>
-                <li class = 'tab'></li>
-                <li class = 'tab'></li>
-                <li class = 'tab'></li>
-                <li class = 'tab'></li>
-            </ul>
-        </div>
-    </div>
-</template>
-
-<template id="option">
-    <option></option>
-</template>
-
-<template id="addSort">
-    <p></p>
-</template>
+</nav>
 
 <script src="//code.jquery.com/jquery-3.3.1.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-<script src="script.js"></script>
-
 </body>
 </html>

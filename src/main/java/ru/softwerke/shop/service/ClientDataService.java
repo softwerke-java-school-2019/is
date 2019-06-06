@@ -25,23 +25,28 @@ public class ClientDataService extends DataService<Client> {
         comparators = new ConcurrentHashMap<>();
         items = new CopyOnWriteArrayList<>();
 
-        predicates.put(BY_NAME, term -> client -> client.getName().equals(term));
-        predicates.put(BY_SECOND_NAME, term -> client -> client.getSecondName().equals(term));
-        predicates.put(BY_PATRONYMIC, term -> client -> client.getPatronymic().equals(term));
+        predicates.put(BY_ID, term -> {
+            Long id = Utils.parseNumber(term, Long::parseLong);
+
+            return client -> term.equals("") || client.getId() == id;
+        });
+        predicates.put(BY_NAME, term -> client -> term.equals("") || client.getName().equals(term));
+        predicates.put(BY_SECOND_NAME, term -> client -> term.equals("") || client.getSecondName().equals(term));
+        predicates.put(BY_PATRONYMIC, term -> client -> term.equals("") || client.getPatronymic().equals(term));
         predicates.put(BY_BIRTHDATE_FROM, term -> {
             LocalDate date = Utils.parseDate(term);
 
-            return client -> client.getBirthday().compareTo(date) >= 0;
+            return client -> term.equals("") || client.getBirthday().compareTo(date) >= 0;
         });
         predicates.put(BY_BIRTHDATE_TO, term -> {
             LocalDate date = Utils.parseDate(term);
 
-            return client -> client.getBirthday().compareTo(date) <= 0;
+            return client -> term.equals("") || client.getBirthday().compareTo(date) <= 0;
         });
         predicates.put(BY_BIRTHDATE, term -> {
             LocalDate date = Utils.parseDate(term);
 
-            return client -> client.getBirthday().compareTo(date) == 0;
+            return client -> term.equals("") || client.getBirthday().compareTo(date) == 0;
         });
 
         comparators.put(BY_ID, Comparator.comparing(Client::getId));

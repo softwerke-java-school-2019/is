@@ -170,12 +170,16 @@ public class DeviceDataService extends DataService<Device> {
             }
 
             String name = json.getString("name");
-            int rgb = json.getInt("rgb");
+            String rgb = json.getString("rgb");
 
             if (colors.keySet().contains(name.toLowerCase())) {
                 throw new RequestException("Color " + name + " already exists");
             }
-            colors.put(name.toLowerCase(), new Color(rgb));
+            int r = Integer.valueOf( rgb.substring( 1, 3 ), 16 );
+            int g = Integer.valueOf( rgb.substring( 3, 5 ), 16 );
+            int b = Integer.valueOf( rgb.substring( 5, 7 ), 16 );
+
+            colors.put(name.toLowerCase(), new Color(r, g, b));
 
         } catch (JSONException ex) {
             throw new RequestException("Wrong json format");

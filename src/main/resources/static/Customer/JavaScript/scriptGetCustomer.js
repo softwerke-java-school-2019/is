@@ -3,38 +3,8 @@ $(document).ready(function() {
 });
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080/api/device',
-    timeout: 5000
-});
-
-let selectorType = document.getElementById("deviceType");
-
-api.get("/type", {}).then(response => {
-    for (let i in response.data) {
-        let temp = document.getElementById("option").content.cloneNode(true);
-        let option = temp.querySelector("option");
-        option.value = response.data[i];
-        option.textContent = response.data[i];
-        selectorType.appendChild(option);
-    }
-
-}).catch(error => {
-    alert("Error")
-});
-
-let selectorColor = document.getElementById("colorName");
-
-api.get("/color", {}).then(response => {
-    for (let i in response.data) {
-        let temp = document.getElementById("option").content.cloneNode(true);
-        let option = temp.querySelector("option");
-        option.value = response.data[i];
-        option.textContent = response.data[i];
-        selectorColor.appendChild(option);
-    }
-
-}).catch(error => {
-    alert("Error")
+    baseURL: 'http://localhost:8080/api/customer',
+    timeout: 1000
 });
 
 let sorting = "";
@@ -46,17 +16,13 @@ function get() {
 
     api.get("", {
         params: {
-            id: document.getElementById("deviceId").value,
-            manufacturer: document.getElementById("manufacturer").value,
-            modelName: document.getElementById("modelName").value,
-            price: document.getElementById("price").value,
-            priceFrom: document.getElementById("priceFrom").value,
-            priceTo: document.getElementById("priceFrom").value,
-            manufactureDate: formatDate(document.getElementById("manufactureDate").value),
-            manufactureDateFrom: formatDate(document.getElementById("manufactureDateFrom").value),
-            manufactureDateTo: formatDate(document.getElementById("manufactureDateTo").value),
-            deviceType: document.getElementById("deviceType").value,
-            colorName: document.getElementById("colorName").value,
+            id: document.getElementById("customerId").value,
+            firstName: document.getElementById("firstName").value,
+            middleName: document.getElementById("middleName").value,
+            lastName: document.getElementById("lastName").value,
+            birthdate: formatDate(document.getElementById("birthdate").value),
+            birthdateFrom: formatDate(document.getElementById("birthdateFrom").value),
+            birthdateTo: formatDate(document.getElementById("birthdateTo").value),
             page: document.getElementById("page").value,
             count: document.getElementById("count").value,
             orderBy: sorting
@@ -68,12 +34,11 @@ function get() {
         for (let i in response.data) {
             let responseContainer = document.getElementById("response").content.cloneNode(true);
             let tab = responseContainer.querySelectorAll('li');
-            tab[0].textContent = response.data[i].manufacturer;
-            tab[1].textContent = response.data[i].modelName;
-            tab[2].textContent = response.data[i].price;
-            tab[3].textContent = response.data[i].manufactureDate;
-            tab[4].textContent = response.data[i].deviceType;
-            tab[5].style = "background: " + response.data[i].colorHex;
+            tab[0].textContent = response.data[i].id;
+            tab[1].textContent = response.data[i].middleName;
+            tab[2].textContent = response.data[i].firstName;
+            tab[3].textContent = response.data[i].lastName;
+            tab[4].textContent = response.data[i].birthdate;
             container.appendChild(responseContainer);
         }
     }).catch(error => {
@@ -116,6 +81,7 @@ function addSorting() {
     else {
         text += ": по возростанию"
     }
+
 
     let card = document.getElementById("card");
     card.style.display = "inline";

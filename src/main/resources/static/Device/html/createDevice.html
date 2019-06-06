@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Create device</title>
+</head>
+<body>
+<nav class="teal darken-1" >
+    <div class="nav-wrapper">
+        <ul class="right hide-on-med-and-down">
+            <li><a href="getDevice.html">Девайс</a></li>
+            <li><a href="../../Customer/html/getCustomer.html">Клиент</a></li>
+            <li><a href="">Чек</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="row">
+    <div class="col s3">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Добавить девайс</span>
+
+                <div class="input-field">
+                    <input id="manufacturer" type="text" class="validate">
+                    <label for="manufacturer">Производитель</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="modelName" type="text" class="validate">
+                    <label for="modelName">Модель</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="price" type="number" class="validate" min="0">
+                    <label for="price">Цена</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="manufactureDate" type="date" class="validate">
+                    <label for="manufactureDate">Дата</label>
+                </div>
+
+                <div class="input-field">
+                    <select id="deviceType">
+                        <option value="" >Выберите тип девайса</option>
+                    </select>
+                    <label>Тип</label>
+                </div>
+
+                <div class="input-field">
+                    <select id="colorName">
+                        <option value = "">Выберите цвет</option>
+                    </select>
+                    <label >Цвет</label>
+                </div>
+            </div>
+        </div>
+        <a class="waves-effect waves-light btn-large col s12" style="margin-bottom: 1%" onclick="addDevice()">Добавить</a>
+        <a class="waves-effect waves-light btn-large col s12" href="getDevice.html">Поиск девайсов</a>
+    </div>
+
+    <div class="col s6" id="container">
+
+    </div>
+
+    <div class="col s3">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Добавить цвет</span>
+
+                <div class="input-field">
+                    <input id="colorNameCreate" type="text" class="validate">
+                    <label for="colorNameCreate">Название</label>
+                </div>
+
+                <div class="input-field">
+                    <p>Выберите цвет: <input id="colorCreate" type="color">
+                </div>
+            </div>
+        </div>
+        <a class="waves-effect waves-light btn-large col s12" onclick="addColor()">Добавить</a>
+
+        <div class="card" style="margin-top: 20%">
+            <div class="card-content">
+                <span class="card-title">Добавить тип</span>
+
+                <div class="input-field">
+                    <input id="typeName" type="text" class="validate">
+                    <label for="typeName">Название</label>
+                </div>
+            </div>
+        </div>
+
+        <a class="waves-effect waves-light btn-large col s12" onclick="addType()">Добавить</a>
+    </div>
+
+
+    <template id="option">
+        <option></option>
+    </template>
+
+    <template id="response" >
+        <div class='card'>
+            <div class='card-tabs'>
+                <ul class='tabs tabs-fixed-width'>
+                    <li class = 'tab'></li>
+                    <li class = 'tab'></li>
+                    <li class = 'tab'></li>
+                    <li class = 'tab'></li>
+                    <li class = 'tab'></li>
+                    <li class = 'tab'></li>
+                    <li class = 'tab'></li>
+                </ul>
+            </div>
+        </div>
+    </template>
+</div>
+
+<script src="//code.jquery.com/jquery-3.3.1.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="../JavaScript/scriptCreateDevice.js"></script>
+</body>
+</html>
