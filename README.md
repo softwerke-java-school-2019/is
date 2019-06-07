@@ -44,7 +44,7 @@ GET /api/<entity>/{id}
 # Device colors and types:
 ## Color:
 * name: String
-* rgb: Number
+* rgb: Number Hex
 ## Type:
 * name: String
 ## Usage
@@ -54,7 +54,7 @@ GET /api/device/color
 POST /api/device/color
 {
   "name": "purple",
-  "rgb": 123
+  "rgb": #551a8b
 }
 
 GET /api/device/type
@@ -92,5 +92,5 @@ POST /api/bill
 		] 
 }
 
-GET /api/device?priceFrom=100&priceTo=10000&orderBy=price&page=2&count=3&orderBy=type
+GET /api/device?priceFrom=100&priceTo=10000&orderBy=price,type&page=2&count=3
 ```
