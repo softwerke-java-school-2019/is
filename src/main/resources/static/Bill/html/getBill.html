@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <meta charset="UTF-8">
+    <title>Get bill</title>
+</head>
+<body>
+
+<nav class="teal darken-1" >
+    <div class="nav-wrapper">
+        <ul class="right hide-on-med-and-down">
+            <li><a href="../../Device/html/getDevice.html">Девайс</a></li>
+            <li><a href="../../Customer/html/getCustomer.html">Клиент</a></li>
+            <li><a href="getBill.html">Чек</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="row">
+    <div class="col s3">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Фильтры</span>
+
+                <div class="input-field">
+                    <input id="id" type="number" class="validate">
+                    <label for="id">ID</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="customerId" type="number" class="validate">
+                    <label for="customerId">ID клиента</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="totalPrice" type="number" class="validate">
+                    <label for="totalPrice">Общая цена</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="totalPriceFrom" type="number" class="validate">
+                    <label for="totalPriceFrom">Общая цена от</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="totalPriceTo" type="number" class="validate">
+                    <label for="totalPriceTo">Общая цена до</label>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input id="purchaseDate" type="text" class="datepicker">
+                        <label for="purchaseDate">Дата</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="purchaseTime" type="text" class="timepicker">
+                        <label for="purchaseTime">Время</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input id="purchaseDateFrom" type="text" class="datepicker">
+                        <label for="purchaseDateFrom">Дата от</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="purchaseTimeFrom" type="text" class="timepicker">
+                        <label for="purchaseTimeFrom">Время от</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s6">
+                        <input id="purchaseDateTo" type="text" class="datepicker">
+                        <label for="purchaseDateTo">Дата до</label>
+                    </div>
+                    <div class="input-field col s6">
+                        <input id="purchaseTimeTo" type="text" class="timepicker">
+                        <label for="purchaseTimeTo">Время до</label>
+                    </div>
+                </div>
+
+                <div class="input-field">
+                    <input id="deviceId" type="number" class="validate">
+                    <label for="deviceId">ID девайса</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="price" type="number" class="validate">
+                    <label for="price">Цена</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="priceFrom" type="number" class="validate">
+                    <label for="priceFrom">Цена от</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="priceTo" type="number" class="validate">
+                    <label for="priceTo">Цена до</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="quantity" type="number" class="validate">
+                    <label for="quantity">Цена</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="quantityFrom" type="number" class="validate">
+                    <label for="quantityFrom">Количетво от</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="quantityTo" type="number" class="validate">
+                    <label for="quantityTo">Количество до</label>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col s6">
+        <div class='card'>
+            <div class='card-content'>
+                <span class="card-title">Чек</span>
+
+                <div class="row">
+                    <div class = "col s7">
+                        <div class='card-tabs'>
+                            <ul class='tabs'>
+                                <li class = 'tab col s2'>Id</li>
+                                <li class = 'tab col s2'>Id клиента</li>
+                                <li class = 'tab col s3'>Общая цена</li>
+                                <li class = 'tab col s5'>Дата</li>
+                            </ul>
+                        </div>
+
+                        <div id="containerBill"></div>
+                    </div>
+
+                    <div class = "col s5">
+                        <div class='card-tabs'>
+                            <ul class='tabs'>
+                                <li class = 'tab col s4'>Id девайса</li>
+                                <li class = 'tab col s4'>Цена</li>
+                                <li class = 'tab col s4'>Количество</li>
+                            </ul>
+                        </div>
+
+                        <div id="containerDevice"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col s3">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title">Отображение и сортировка</span>
+
+                <div class="input-field">
+                    <input id="page" type="number" class="validate" min="1">
+                    <label for="page">Страница</label>
+                </div>
+
+                <div class="input-field">
+                    <input id="count" type="number" class="validate" min="1">
+                    <label for="count">Количество</label>
+                </div>
+
+                <div class="input-field">
+                    <select id="sortBy">
+                        <option value="">Выберете параметр сортировки</option>
+                        <option value="customerId" >По Id клиента</option>
+                        <option value="purchaseDateTime" >По дате</option>
+                        <option value="totalPrice">По цене</option>
+                    </select>
+                    <label for="sortBy">Параметры сортировки</label>
+                </div>
+
+                <div class="switch" style="margin-bottom: 5%; margin-top: 5%">
+                    <label>
+                        По возростанию
+                        <input type="checkbox" id="order">
+                        <span class="lever"></span>
+                        По убыванию
+                    </label>
+                </div>
+
+
+                <div class='card' id="card" style="display: none">
+                    <div class='card-content' id="containerSort">
+                    </div>
+                </div>
+
+                <div class="row">
+                    <a class="waves-effect waves-light btn col s4" onclick="addSorting()">Добавить</a>
+                    <a class="waves-effect waves-light btn col s4" onclick="removeSorting()">Удалить</a>
+                    <a class="waves-effect waves-light btn col s4" onclick="clearSortings()">Очистить</a>
+                </div>
+            </div>
+        </div>
+
+        <a class="waves-effect waves-light btn-large col s12" style="margin-bottom: 1%" href="createBill.html">Добавить чек</a>
+        <a class="waves-effect waves-light btn-large col s12" onclick="get()">Поиск</a>
+    </div>
+
+</div>
+
+<template id="responseBill" >
+    <div class='card'>
+        <div class='card-tabs'>
+            <ul class='tabs'>
+                <li class = 'tab col s2'></li>
+                <li class = 'tab col s2'></li>
+                <li class = 'tab col s3'></li>
+                <li class = 'tab col s5'></li>
+            </ul>
+        </div>
+    </div>
+</template>
+
+<template id="responseBillItem" >
+    <div class='card'>
+        <div class='card-tabs'>
+            <ul class='tabs'>
+                <li class = 'tab col s4'></li>
+                <li class = 'tab col s4'></li>
+                <li class = 'tab col s4'></li>
+            </ul>
+        </div>
+    </div>
+</template>
+
+<template id="addSort">
+    <p></p>
+</template>
+
+<script src="//code.jquery.com/jquery-3.3.1.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+<script src="../JavaScript/scriptGetBill.js"></script>
+
+</body>
+</html>

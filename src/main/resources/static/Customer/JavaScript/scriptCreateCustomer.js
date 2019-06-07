@@ -2,6 +2,15 @@ $(document).ready(function() {
     $('select').formSelect();
 });
 
+$(document).ready(function(){
+    $('.datepicker').datepicker({
+        format: 'dd.mm.yyyy',
+        yearRange: [1900, new Date().getFullYear()],
+        minDate: new Date(1900, 1, 1),
+        maxDate: new Date()
+    });
+});
+
 const api = axios.create({
     baseURL: 'http://localhost:8080/api/customer',
     timeout: 1000
@@ -11,7 +20,7 @@ function addCustomer() {
     api.post("", {
         firstName: document.getElementById("firstName").value,
         middleName: document.getElementById("middleName").value,
-        birthdate: formatDate(document.getElementById("birthdate").value),
+        birthdate: document.getElementById("birthdate").value,
         lastName: document.getElementById("lastName").value,
     })
         .then(response => {
@@ -28,22 +37,4 @@ function addCustomer() {
         .catch(error => {
             alert(error.response.data.message)
         })
-}
-
-function formatDate(dateStr) {
-    if (dateStr === '') {
-        return ''
-    }
-
-    let date = new Date(dateStr);
-
-    let dd = date.getDate();
-    if (dd < 10) dd = '0' + dd;
-
-    let mm = date.getMonth() + 1;
-    if (mm < 10) mm = '0' + mm;
-
-    let yy = date.getFullYear();
-
-    return dd + '.' + mm + '.' + yy;
 }

@@ -2,6 +2,15 @@ $(document).ready(function() {
     $('select').formSelect();
 });
 
+$(document).ready(function(){
+    $('.datepicker').datepicker({
+        format: 'dd.mm.yyyy',
+        yearRange: [1900, new Date().getFullYear()],
+        minDate: new Date(1900, 1, 1),
+        maxDate: new Date()
+    });
+});
+
 const api = axios.create({
     baseURL: 'http://localhost:8080/api/device',
     timeout: 1000
@@ -52,9 +61,9 @@ function get() {
             price: document.getElementById("price").value,
             priceFrom: document.getElementById("priceFrom").value,
             priceTo: document.getElementById("priceFrom").value,
-            manufactureDate: formatDate(document.getElementById("manufactureDate").value),
-            manufactureDateFrom: formatDate(document.getElementById("manufactureDateFrom").value),
-            manufactureDateTo: formatDate(document.getElementById("manufactureDateTo").value),
+            manufactureDate: document.getElementById("manufactureDate").value,
+            manufactureDateFrom: document.getElementById("manufactureDateFrom").value,
+            manufactureDateTo: document.getElementById("manufactureDateTo").value,
             deviceType: document.getElementById("deviceType").value,
             colorName: document.getElementById("colorName").value,
             page: document.getElementById("page").value,
@@ -80,24 +89,6 @@ function get() {
     }).catch(error => {
         alert(error.response.data.message)
     });
-}
-
-function formatDate(dateStr) {
-    if (dateStr === '') {
-        return ''
-    }
-
-    let date = new Date(dateStr);
-
-    let dd = date.getDate();
-    if (dd < 10) dd = '0' + dd;
-
-    let mm = date.getMonth() + 1;
-    if (mm < 10) mm = '0' + mm;
-
-    let yy = date.getFullYear();
-
-    return dd + '.' + mm + '.' + yy;
 }
 
 function addSorting() {

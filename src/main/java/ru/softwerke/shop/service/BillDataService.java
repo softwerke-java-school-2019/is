@@ -44,75 +44,80 @@ public class BillDataService extends DataService<Bill> {
         comparators = new ConcurrentHashMap<>();
         items = new CopyOnWriteArrayList<>();
 
+        predicates.put(BY_ID, term -> {
+            Long id = Utils.parseNumber(term, Long::parseLong);
+
+            return bill -> term.equals("") || bill.getId() == id;
+        });
         predicates.put(BY_CLIENT_ID, term -> {
             long id = Utils.parseNumber(term, Long::parseLong);
 
-            return bill -> bill.getClientId() == id;
+            return bill -> term.equals("") || bill.getClientId() == id;
         });
         predicates.put(BY_TOTAL_PRICE_FROM, term -> {
             BigDecimal priceFrom = Utils.parseNumber(term, BigDecimal::new);
 
-            return bill -> bill.getTotalPrice().compareTo(priceFrom) >= 0;
+            return bill -> term.equals("") || bill.getTotalPrice().compareTo(priceFrom) >= 0;
         });
         predicates.put(BY_TOTAL_PRICE_TO, term -> {
             BigDecimal priceTo = Utils.parseNumber(term, BigDecimal::new);
 
-            return bill -> bill.getTotalPrice().compareTo(priceTo) <= 0;
+            return bill -> term.equals("") || bill.getTotalPrice().compareTo(priceTo) <= 0;
         });
         predicates.put(BY_TOTAL_PRICE, term -> {
             BigDecimal price = Utils.parseNumber(term, BigDecimal::new);
 
-            return bill -> bill.getTotalPrice().compareTo(price) == 0;
+            return bill -> term.equals("") || bill.getTotalPrice().compareTo(price) == 0;
         });
         predicates.put(BY_PURCHASE_DATE_TIME_FROM, term -> {
             LocalDateTime date = Utils.parseDateTime(term);
 
-            return bill -> bill.getPurchaseDateTime().compareTo(date) >= 0;
+            return bill -> term.equals("") || bill.getPurchaseDateTime().compareTo(date) >= 0;
         });
         predicates.put(BY_PURCHASE_DATE_TIME_TO, term -> {
             LocalDateTime date = Utils.parseDateTime(term);
 
-            return bill -> bill.getPurchaseDateTime().compareTo(date) <= 0;
+            return bill -> term.equals("") || bill.getPurchaseDateTime().compareTo(date) <= 0;
         });
         predicates.put(BY_PURCHASE_DATE_TIME, term -> {
             LocalDateTime date = Utils.parseDateTime(term);
 
-            return bill -> bill.getPurchaseDateTime().compareTo(date) == 0;
+            return bill -> term.equals("") || bill.getPurchaseDateTime().compareTo(date) == 0;
         });
         predicates.put(BY_DEVICE_ID, term -> {
             long id = Utils.parseNumber(term, Long::parseLong);
 
-            return bill -> bill.getItems().stream().anyMatch(item -> item.getDeviceId() == id);
+            return bill -> term.equals("") || bill.getItems().stream().anyMatch(item -> item.getDeviceId() == id);
         });
         predicates.put(BY_PRICE_FROM, term -> {
             BigDecimal priceFrom = Utils.parseNumber(term, BigDecimal::new);
 
-            return bill -> bill.getItems().stream().anyMatch(item -> item.getPrice().compareTo(priceFrom) >= 0);
+            return bill -> term.equals("") || bill.getItems().stream().anyMatch(item -> item.getPrice().compareTo(priceFrom) >= 0);
         });
         predicates.put(BY_PRICE_TO, term -> {
             BigDecimal priceTo = Utils.parseNumber(term, BigDecimal::new);
 
-            return bill -> bill.getItems().stream().anyMatch(item -> item.getPrice().compareTo(priceTo) <= 0);
+            return bill -> term.equals("") || bill.getItems().stream().anyMatch(item -> item.getPrice().compareTo(priceTo) <= 0);
         });
         predicates.put(BY_PRICE, term -> {
             BigDecimal price = Utils.parseNumber(term, BigDecimal::new);
 
-            return bill -> bill.getItems().stream().anyMatch(item -> item.getPrice().compareTo(price) == 0);
+            return bill -> term.equals("") || bill.getItems().stream().anyMatch(item -> item.getPrice().compareTo(price) == 0);
         });
         predicates.put(BY_QUANTITY_FROM, term -> {
            long quantityFrom = Utils.parseNumber(term, Long::new);
 
-            return bill -> bill.getItems().stream().anyMatch(item -> item.getQuantity() >= quantityFrom);
+            return bill -> term.equals("") || bill.getItems().stream().anyMatch(item -> item.getQuantity() >= quantityFrom);
         });
         predicates.put(BY_QUANTITY_TO, term -> {
             long quantityTo = Utils.parseNumber(term, Long::new);
 
-            return bill -> bill.getItems().stream().anyMatch(item -> item.getQuantity() <= quantityTo);
+            return bill -> term.equals("") || bill.getItems().stream().anyMatch(item -> item.getQuantity() <= quantityTo);
         });
         predicates.put(BY_QUANTITY, term -> {
             long quantity = Utils.parseNumber(term, Long::new);
 
-            return bill -> bill.getItems().stream().anyMatch(item -> item.getQuantity() == quantity);
+            return bill -> term.equals("") || bill.getItems().stream().anyMatch(item -> item.getQuantity() == quantity);
         });
 
         comparators.put(BY_ID, Comparator.comparing(Bill::getId));
