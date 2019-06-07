@@ -50,6 +50,8 @@ public class BillDeserializer extends JsonDeserializer<Bill> {
 
         long clientId = Utils.parseNumber(clientIdNode.asText(), Long::parseLong);
 
-        return new Bill(clientId, LocalDateTime.now(), items);
+        LocalDateTime now = LocalDateTime.now();
+
+        return new Bill(clientId, Utils.parseDateTime(now.format(Utils.dateWithTimeFormatter)), items);
     }
 }
